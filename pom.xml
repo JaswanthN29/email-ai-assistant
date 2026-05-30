@@ -70,10 +70,11 @@
 			<version>1.34.1</version>
 		</dependency>
 		<dependency>
-			<groupId>com.google.apis</groupId>
-			<artifactId>google-api-services-gmail</artifactId>
-			<version>v1-rev20230818-2.0.0</version>
+			<groupId>com.google.http-client</groupId>
+			<artifactId>google-http-client-jackson2</artifactId>
+			<version>1.34.1</version>
 		</dependency>
+		<!-- Removed google-api-services-gmail to use direct REST calls via google-api-client -->
 	</dependencies>
 
 	<build>
