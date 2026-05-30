@@ -78,3 +78,27 @@ https://github.com/JaswanthN29/email-ai-assistant
 
 - If you want to keep the Telegram token secure, replace the hard-coded value in `application.properties` with an environment variable reference such as `telegram.bot.token=${TELEGRAM_BOT_TOKEN}`.
 - If you add more services or endpoints, document them here so the project remains easy to understand.
+
+## Gmail API: Fetch Unread Messages
+
+This project includes a simple Gmail integration that lists unread messages using the Gmail API.
+
+1. Enable the Gmail API in the Google Cloud Console and create OAuth 2.0 credentials for a "Desktop app" or "Web application". Download the credentials JSON and save it as `credentials.json` in the project root (or set `google.credentials.file` in `application.properties`).
+
+2. Configure the token directory and credentials path in `src/main/resources/application.properties` (optional):
+
+```properties
+google.credentials.file=credentials.json
+google.tokens.dir=tokens
+app.name=email-ai-assistant
+```
+
+3. Start the application and open the URL printed by the auth flow (the first time you run it the OAuth flow will open a browser to authorize access). Then access the endpoint:
+
+```
+GET http://localhost:8080/gmail/unread
+```
+
+The endpoint returns a JSON array of unread messages with basic fields (`id`, `threadId`, `from`, `subject`, `snippet`, `body`).
+
+Security note: The OAuth credentials and tokens allow access to your Gmail account — keep them secure and do not commit them to source control.
