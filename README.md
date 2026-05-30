@@ -40,13 +40,9 @@ cd email-ai-assistant
 
 ### Telegram Bot Token
 
-The app expects a Telegram bot token in `src/main/resources/application.properties`:
+The app expects a Telegram bot token in `src/main/resources/application.properties`.
 
-```properties
-telegram.bot.token=8646181185:AAFlTOsRduixchegyOP_Uhj-z_lUf91Rf6c
-```
-
-> Note: Storing secrets in source files is not recommended for production. Prefer using environment variables or a secure secrets store.
+> Note: Do not store secrets directly in source code. Prefer using environment variables or a secure secrets store.
 
 ## Build and Run
 
