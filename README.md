@@ -1,0 +1,84 @@
+# Email AI Assistant
+
+A Spring Boot web application for an email AI assistant built in Java.
+
+## Project Overview
+
+This project is a Spring Boot service named `email-ai-assistant`. It includes a simple web application structure and is designed to support an AI assistant for email workflows. The app is configured with a Telegram bot token and may expose HTTP API endpoints for integration.
+
+## Features
+
+- Spring Boot web application
+- Uses `application.properties` for configuration
+- Designed to support Telegram bot integration
+- Java 21 compatible
+
+## Tech Stack
+
+- Java 21
+- Spring Boot 3.5.0
+- Maven build system
+- Lombok (provided scope)
+
+## Prerequisites
+
+- Java 21 JDK
+- Maven 3.8+ or later
+- Git
+- SSH access configured for GitHub (recommended)
+
+## Setup
+
+1. Clone the repository:
+
+```bash
+git clone git@github.com:JaswanthN29/email-ai-assistant.git
+cd email-ai-assistant
+```
+
+2. Configure the application properties.
+
+### Telegram Bot Token
+
+The app expects a Telegram bot token in `src/main/resources/application.properties`:
+
+```properties
+telegram.bot.token=8646181185:AAFlTOsRduixchegyOP_Uhj-z_lUf91Rf6c
+```
+
+> Note: Storing secrets in source files is not recommended for production. Prefer using environment variables or a secure secrets store.
+
+## Build and Run
+
+Build the project with Maven:
+
+```bash
+./mvnw clean package
+```
+
+Run the Spring Boot application:
+
+```bash
+./mvnw spring-boot:run
+```
+
+The app will start on the default Spring Boot port `8080` unless otherwise configured.
+
+## Test
+
+Run the included test suite:
+
+```bash
+./mvnw test
+```
+
+## GitHub Repository
+
+The repository is available at:
+
+https://github.com/JaswanthN29/email-ai-assistant
+
+## Notes
+
+- If you want to keep the Telegram token secure, replace the hard-coded value in `application.properties` with an environment variable reference such as `telegram.bot.token=${TELEGRAM_BOT_TOKEN}`.
+- If you add more services or endpoints, document them here so the project remains easy to understand.
