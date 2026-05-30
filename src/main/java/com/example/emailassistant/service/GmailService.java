@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
@@ -14,6 +15,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import com.example.emailassistant.model.EmailMessage;
+import com.example.emailassistant.model.SyncMetadata;
+import com.example.emailassistant.repository.EmailMessageRepository;
+import com.example.emailassistant.repository.SyncMetadataRepository;
 
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
@@ -34,6 +40,14 @@ public class GmailService {
 
     private static final Logger log = LoggerFactory.getLogger(GmailService.class);
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
+
+    private final EmailMessageRepository emailMessageRepository;
+    private final SyncMetadataRepository syncMetadataRepository;
+
+    public GmailService(EmailMessageRepository emailMessageRepository, SyncMetadataRepository syncMetadataRepository) {
+        this.emailMessageRepository = emailMessageRepository;
+        this.syncMetadataRepository = syncMetadataRepository;
+    }
 
     @Value("${google.credentials.file:credentials.json}")
     private String credentialsFilePath;
@@ -154,7 +168,32 @@ public class GmailService {
                     "snippet", snippet,
                     "body", body
             ));
+
+            // Save to database only if the sender is from Gmail (@gmail.com)
+            if (from != null && from.toLowerCase().contains("@gmail.com")) {
+                if (emailMessageRepository.findByMessageId(id).isEmpty()) {
+                    EmailMessage emailMessage = EmailMessage.builder()
+                            .messageId(id)
+                            .sender(from)
+                            .subject(subject)
+                            .snippet(snippet)
+                            .body(body)
+                            .build();
+                    emailMessageRepository.save(emailMessage);
+                    log.info("Saved Gmail-sourced email message to database: {}", id);
+                }
+            } else {
+                log.info("Skipping email {} as sender is not a @gmail.com address: {}", id, from);
+            }
         }
+
+        // Save last sync/update time
+        SyncMetadata syncMetadata = SyncMetadata.builder()
+                .key("LAST_GMAIL_SYNC_TIME")
+                .value(LocalDateTime.now().toString())
+                .build();
+        syncMetadataRepository.save(syncMetadata);
+        log.info("Updated Gmail sync metadata with current timestamp: {}", syncMetadata.getValue());
 
         return result;
     }
