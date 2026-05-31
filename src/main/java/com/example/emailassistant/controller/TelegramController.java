@@ -33,8 +33,8 @@ public class TelegramController {
         String chatId = payload.get("chatId");
         String text = payload.get("text");
 
-        if (chatId == null || chatId.isBlank() || text == null || text.isBlank()) {
-            return ResponseEntity.badRequest().body(Map.of("success", false, "error", "Missing chatId or text"));
+        if (text == null || text.isBlank()) {
+            return ResponseEntity.badRequest().body(Map.of("success", false, "error", "Missing text"));
         }
 
         boolean success = telegramService.sendMessage(chatId, text);
@@ -47,10 +47,10 @@ public class TelegramController {
 
     @GetMapping("/send")
     public ResponseEntity<Map<String, Object>> sendMessageGet(
-            @RequestParam String chatId,
+            @RequestParam(required = false) String chatId,
             @RequestParam String text) {
-        if (chatId == null || chatId.isBlank() || text == null || text.isBlank()) {
-            return ResponseEntity.badRequest().body(Map.of("success", false, "error", "Missing chatId or text"));
+        if (text == null || text.isBlank()) {
+            return ResponseEntity.badRequest().body(Map.of("success", false, "error", "Missing text"));
         }
 
         boolean success = telegramService.sendMessage(chatId, text);

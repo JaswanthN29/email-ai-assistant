@@ -169,21 +169,17 @@ public class GmailService {
                     "body", body
             ));
 
-            // Save to database only if the sender is from Gmail (@gmail.com)
-            if (from != null && from.toLowerCase().contains("@gmail.com")) {
-                if (emailMessageRepository.findByMessageId(id).isEmpty()) {
-                    EmailMessage emailMessage = EmailMessage.builder()
-                            .messageId(id)
-                            .sender(from)
-                            .subject(subject)
-                            .snippet(snippet)
-                            .body(body)
-                            .build();
-                    emailMessageRepository.save(emailMessage);
-                    log.info("Saved Gmail-sourced email message to database: {}", id);
-                }
-            } else {
-                log.info("Skipping email {} as sender is not a @gmail.com address: {}", id, from);
+            // Save to database
+            if (emailMessageRepository.findByMessageId(id).isEmpty()) {
+                EmailMessage emailMessage = EmailMessage.builder()
+                        .messageId(id)
+                        .sender(from)
+                        .subject(subject)
+                        .snippet(snippet)
+                        .body(body)
+                        .build();
+                emailMessageRepository.save(emailMessage);
+                log.info("Saved email message to database: {}", id);
             }
         }
 

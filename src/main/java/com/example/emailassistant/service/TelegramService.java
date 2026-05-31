@@ -16,6 +16,9 @@ public class TelegramService {
     @Value("${telegram.bot.token:}")
     private String telegramBotToken;
 
+    @Value("${telegram.chat.id:}")
+    private String defaultChatId;
+
     public String sayHello() {
         if (telegramBotToken == null || telegramBotToken.isBlank()) {
             log.warn("Telegram bot token is missing or empty");
@@ -27,8 +30,15 @@ public class TelegramService {
     }
 
     public boolean sendMessage(String chatId, String text) {
+        String targetChatId = (chatId == null || chatId.isBlank()) ? defaultChatId : chatId;
+
         if (telegramBotToken == null || telegramBotToken.isBlank()) {
             log.warn("Telegram bot token is missing or empty; cannot send message");
+            return false;
+        }
+
+        if (targetChatId == null || targetChatId.isBlank()) {
+            log.warn("Telegram chatId is missing or empty; cannot send message");
             return false;
         }
 
@@ -36,7 +46,7 @@ public class TelegramService {
             String url = "https://api.telegram.org/bot" + telegramBotToken + "/sendMessage";
             var response = restClient.post()
                     .uri(url)
-                    .body(Map.of("chat_id", chatId, "text", text))
+                    .body(Map.of("chat_id", targetChatId, "text", text))
                     .retrieve()
                     .toEntity(Map.class);
 
