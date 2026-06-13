@@ -1,0 +1,42 @@
+<!-- Creator Profile Details -->
+<div id="profile-section" style="margin-bottom: 2.5rem; animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);">
+
+    <div style="display: flex; flex-direction: column; align-items: center; text-align: center; background: var(--bg-sub); border: 1px solid var(--border-color); border-radius: 8px; padding: 2.2rem; transition: var(--transition);">
+        <div id="avatar-container" style="position: relative; width: 90px; height: 90px; margin-bottom: 1.25rem;">
+            <img src="/api/profile/image" style="width: 90px; height: 90px; border-radius: 50%; object-fit: cover; border: 1px solid var(--border-color);" alt="Jaswanth" onerror="this.style.display='none'; document.getElementById('fallback-avatar').style.display='flex';">
+            <div id="fallback-avatar" style="width: 90px; height: 90px; border-radius: 50%; background: var(--primary); display: none; align-items: center; justify-content: center; font-size: 2.3rem; color: var(--primary-text); font-weight: 700; position: absolute; top: 0; left: 0;">
+                JN
+            </div>
+        </div>
+        
+        <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.5rem; font-weight: 700; margin-bottom: 0.3rem; color: var(--text-main);">Jaswanth Naraharisetty</h3>
+        <p style="color: var(--text-sub); font-weight: 500; font-size: 0.95rem; margin-bottom: 1.25rem; letter-spacing: 0.02em;">Software Engineer & Architect</p>
+        
+        <p style="color: var(--text-sub); font-size: 0.92rem; line-height: 1.6; max-width: 480px; margin-bottom: 1.75rem; text-align: justify;">
+            IT professional with 10 years of experience specializing in Pega CDH and Java, with strong expertise in customer decisioning, AI-driven automation, and business process optimization. Certified Pega CSA, CSSA, and CPDC with hands-on experience in PRPC, Case Management, system design, SQL, Power BI, Excel, and Java OOP concepts. Experienced in delivering large-scale banking and decisioning solutions for European clients, with a strong background in architecture, implementation, and automation initiatives.
+        </p>
+
+        <div class="profile-details-grid" style="width: 100%; border-top: 1px solid var(--border-color); padding-top: 1.25rem; margin-bottom: 1.75rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; text-align: left;">
+            <div>
+                <span style="display: block; font-size: 0.72rem; color: var(--text-sub); text-transform: uppercase; font-weight: 600; margin-bottom: 0.3rem; letter-spacing: 0.05em;">Education</span>
+                <span style="font-size: 0.88rem; font-weight: 600; color: var(--text-main);">ECE, K.L. University</span>
+            </div>
+            <div>
+                <span style="display: block; font-size: 0.72rem; color: var(--text-sub); text-transform: uppercase; font-weight: 600; margin-bottom: 0.3rem; letter-spacing: 0.05em;">Specialty</span>
+                <span style="font-size: 0.88rem; font-weight: 600; color: var(--text-main);">System Integration & AI</span>
+            </div>
+        </div>
+
+        <div style="display: flex; gap: 1rem; justify-content: center; width: 100%; flex-wrap: wrap; margin-bottom: 1rem;">
+            <a href="https://www.linkedin.com/in/jaswanth-naraharisetty-07252a93/" target="_blank" class="btn" style="flex: 1; min-width: 140px; background: #0077b5; padding: 0.85rem; font-size: 0.95rem; border-radius: 8px; text-decoration: none; color: #ffffff; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: var(--transition);">
+                <i class="fa-brands fa-linkedin"></i> LinkedIn
+            </a>
+            <a href="https://www.instagram.com/jaswanth_naraharisetty/" target="_blank" class="btn" style="flex: 1; min-width: 140px; background: #e1306c; color: #ffffff; padding: 0.85rem; font-size: 0.95rem; border-radius: 8px; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: var(--transition);">
+                <i class="fa-brands fa-instagram"></i> Instagram
+            </a>
+        </div>
+        <button onclick="openContactModal()" class="btn" style="width: 100%; padding: 0.85rem; font-size: 0.95rem; border-radius: 8px; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: var(--transition);">
+            <i class="fa-solid fa-paper-plane"></i> Contact Us
+        </button>
+    </div>
+</div>

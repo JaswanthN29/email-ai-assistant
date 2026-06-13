@@ -1,0 +1,74 @@
+{
+  "https://docs.pega.com/bundle/customer-decision-hub/page/customer-decision-hub/hub/next-best-action-designer.html": {
+    "title": "Next-Best-Action Designer Capabilities",
+    "content": "Next-Best-Action Designer is a core component of Pega Customer Decision Hub that provides an intuitive, guided interface for defining and managing the decisioning logic used to deliver personalized customer experiences. Guided Workflow: It simplifies the creation of Next-Best-Action requirements by generating the underlying decision strategies automatically. Engagement Policies: Allows business users to define criteria such as eligibility, applicability, and suitability to ensure customers receive the most relevant actions. Constraints: Allows configuring limits to prevent over-communication, including outbound channel limits, outbound action limits, and inbound action limits. Arbitration: Provides a mechanism to prioritize actions based on business rules, predictive analytics, and adaptive analytics. Omnichannel Support: Enables the consistent delivery of personalized experiences across inbound (website, mobile, call center) and outbound (email, SMS) channels. It supports a structured business hierarchy (Issues and Groups) to organize your actions and decisioning logic."
+  },
+  "https://docs.pega.com/bundle/customer-decision-hub/page/customer-decision-hub/cdh-portal/nba-designer-basics.html": {
+    "title": "Defining Next Best Actions with NBA Designer",
+    "content": "The Next-Best-Action Designer is used to define, manage, and monitor actions across inbound and outbound channels. It relies on a combination of predictive/adaptive analytics and business rules (Engagement Policies). Key Tabs and Configurations include: Taxonomy tab: Used to define the issue and group hierarchy, customer journeys, and Strategy Result properties. Engagement Policies tab: Allows you to define when specific actions or groups of actions are appropriate for customers. Arbitration tab: Used to prioritize eligible actions based on customer relevance and business priority."
+  },
+  "https://docs.pega.com/bundle/customer-decision-hub/page/customer-decision-hub/cdh-portal/understand-next-best-action-outbound.html": {
+    "title": "Understanding Next-Best-Action Outbound",
+    "content": "Understanding Next-Best-Action Outbound covers the mechanics of outbound customer engagement in Pega Customer Decision Hub. It processes customer profiles and decision details to send personalized messages via channels like email or SMS. Instead of traditional outbound batch marketing, CDH recommends transitioning to an 'Always-On' outbound approach. This ensures that outbound communications are dynamically generated based on the latest customer context and decision management engine logic, rather than fixed static lists."
+  },
+  "https://docs.pega.com/bundle/customer-decision-hub/page/customer-decision-hub/cdh-portal/nba-strategy-overview.html": {
+    "title": "Understanding the Next-Best-Action Strategy Framework",
+    "content": "The Next-Best-Action Strategy Framework serves as the foundation for Next-Best-Action Designer. It compiles business configurations into globally optimized strategies (GOS) that improve execution performance. The framework controls the end-to-end evaluation flow of actions, pulling together issue and group hierarchies, evaluating engagement policies, performing arbitration, and applying constraints. It also includes Test Mode execution paths to support simulation and Customer Profile Viewer testing without filtering out records."
+  },
+  "https://docs.pega.com/bundle/customer-decision-hub/page/customer-decision-hub/cdh-portal/next-best-action-framework.html": {
+    "title": "Next-Best-Action Strategy Framework Configuration",
+    "content": "The Next-Best-Action Strategy Framework is the orchestration layer that combines predictive and adaptive analytics with business rules to identify optimal customer interactions. It processes trigger strategies, filters actions based on eligibility, applicability, and suitability, applies weighting to context, runs arbitration, and enforces limits before final delivery. Developers can extend the framework using extension points provided at different levels (e.g. Issue, Group, or Action) to implement custom decisioning requirements."
+  },
+  "https://docs.pega.com/bundle/customer-decision-hub/page/customer-decision-hub/cdh-portal/nba-designer-basics-channels.html": {
+    "title": "Understanding NBA Designer Channels",
+    "content": "You can access the Channels tab within the Next-Best-Action Designer to manage outbound schedules and inbound triggers. Real-Time Channels: These channels can be invoked via the Container REST API, Kafka event streams, or on a scheduled basis. You can configure real-time containers as triggers for your actions. Scheduling: The Channels tab allows you to set up primary schedules for outbound runs, including recurrence frequency, start dates, and end dates."
+  },
+  "https://docs.pega.com/bundle/customer-decision-hub/page/customer-decision-hub/cdh-portal/nba-designer-constraints-overview.html": {
+    "title": "NBA Designer Constraints",
+    "content": "Next-Best-Action Designer constraints allow business users to control communication volume and avoid customer over-exposure. It includes Outbound Channel Limits (to limit volume per channel like Email/SMS over a period), Outbound Action Limits (to cap how many times a particular offer is sent), and Inbound Action Limits (to restrict the count of actions shown during active sessions, e.g. web click limits)."
+  },
+  "https://docs.pega.com/bundle/customer-decision-hub/page/customer-decision-hub/cdh-portal/next-best-action-designer-settings.html": {
+    "title": "NBA Designer Configurations and Settings",
+    "content": "NBA Designer Settings and Configurations provide details on managing core settings such as product associations, placement priorities, real-time containers, and adaptive model propensity settings. These properties dictate how the strategy engine behaves on startup, how propensity is calculated, and how model learning is applied to actions and treatments."
+  },
+  "https://docs.pega.com/bundle/customer-decision-hub/page/customer-decision-hub/cdh-portal/configure-engagement-actions.html": {
+    "title": "Configuring Engagement Policies for Actions",
+    "content": "In Pega Customer Decision Hub, configuring engagement policies for actions allows you to define the specific conditions under which an action or a group of actions is available to a customer. Engagement policies consist of three primary types of conditions: Eligibility (e.g., residing in a specific geographic location), Applicability (e.g., not offering a phone discount to a customer who already owns that model), and Suitability (e.g., avoiding credit card offers for customers likely to default). Business users configure these in Next-Best-Action Designer by adding condition rows using fields, strategies, or when conditions."
+  },
+  "https://docs.pega.com/bundle/customer-decision-hub/page/customer-decision-hub/cdh-portal/nba-strategy-arbitration.html": {
+    "title": "Arbitration Strategy in Next-Best-Action Framework",
+    "content": "The Arbitration Strategy (often referred to as nba-strategy-arbitration) is a core component of the Pega Customer Decision Hub Next-Best-Action Strategy Framework. It is responsible for calculating the final priority score for actions using the formula: P ✕ C ✕ V ✕ L (Propensity ✕ Context ✕ Value ✕ Business Levers). Propensity: The likelihood of a customer responding favorably. Context: Weighting based on container and event payloads to influence action priority. Value: The financial value of the action. Business Levers: Levers configured by business users. The strategy determines the FinalPropensity value using adaptive models or fallback models."
+  },
+  "https://docs.pega.com/bundle/customer-decision-hub/page/customer-decision-hub/cdh-portal/contact-policies.html": {
+    "title": "Suppressing Actions with Contact Policies",
+    "content": "Contact Policies in Pega Customer Decision Hub are used to control the frequency and exposure of actions to customers, preventing over-communication or redundant messaging. They suppress specific communications after a certain number of outcomes (such as impressions or clicks) are reached within a set time period (e.g., 7 or 30 days). Multi-level Contact Policies allow tracking impressions at a customer level while suppressing at a household level to ensure interactions remain relevant."
+  },
+  "https://docs.pega.com/bundle/customer-decision-hub/page/customer-decision-hub/cdh-portal/actions-treatments.html": {
+    "title": "Actions and Treatments in Pega Customer Decision Hub",
+    "content": "In Pega Customer Decision Hub, Actions and Treatments are the foundational components for delivering personalized customer experiences. Actions represent the 'what' of your engagement strategy (specific offers or recommendations). Treatments represent the 'how' of your engagement strategy (defining presentation and formatting details like email templates, web banners, or SMS text). A single Action can have multiple Treatments, allowing the same core message to be tailored for different communication channels."
+  },
+  "https://docs.pega.com/bundle/customer-decision-hub/page/customer-decision-hub/hub/cdh-product-overview.html": {
+    "title": "Customer Decision Hub Product Overview",
+    "content": "Pega Customer Decision Hub is a comprehensive solution designed to enhance customer experience and drive marketing ROI by leveraging a Next-Best-Action (NBA) approach. The platform uses decision management and real-time analytics to determine the right message, at the right time, in the right channel. It manages inbound and outbound conversations across the customer lifecycle, incorporating predictive/adaptive models and business rules."
+  },
+  "https://docs.pega.com/bundle/customer-decision-hub/page/customer-decision-hub/hub/cdh-product-overview-nba.html": {
+    "title": "Next-Best-Action Overview",
+    "content": "Next-Best-Action Overview covers the principles of Next-Best-Action decisioning. The Hub evaluates customer context, business rules, constraints, and statistical models at every interaction point to select the single best action to recommend next. This approach replaces traditional product-centric marketing with a customer-centric conversation framework that prioritizes relevancy, value, and customer needs."
+  },
+  "https://docs.pega.com/bundle/customer-decision-hub/page/customer-decision-hub/implement/run-cdh-setup-wizard.html": {
+    "title": "CDH Setup Wizard",
+    "content": "The Customer Decision Hub Setup Wizard automates the initial steps of creating your implementation application. It preconfigures it using best-practice industry templates and configures Pega 1:1 Operations Manager for change management. To run the wizard, log in to Dev Studio as a system architect, select New Application, choose Build from an existing Application, select Pega Customer Decision Hub, and launch the setup wizard."
+  },
+  "https://docs.pega.com/bundle/customer-decision-hub/page/customer-decision-hub/implement/cdh-implementation-overview.html": {
+    "title": "CDH Implementation Overview",
+    "content": "CDH Implementation Overview outlines the project lifecycle and structure for deploying Pega Customer Decision Hub. It guides you from the initiation phase, preparing the environment, running the setup wizard, configuring business hierarchy and taxonomy, setting up channels, to deploying adaptive models, establishing simulations, and setting up release pipelines."
+  },
+  "https://docs.pega.com/bundle/customer-decision-hub/page/customer-decision-hub/hub/get-started.html": {
+    "title": "CDH Getting Started Guide",
+    "content": "The Getting Started guide is the primary entry point for developers and business users learning Pega Customer Decision Hub. It covers basic concepts, environment provisioning, access groups, learning paths, and links to reference documentation and release notes for Pega CDH."
+  },
+  "https://docs.pega.com/bundle/customer-decision-hub/page/customer-decision-hub/cdh-portal/reference.html": {
+    "title": "CDH Reference Documentation",
+    "content": "CDH Reference Documentation provides advanced guides, technical references, API schemas, and architecture patterns for Pega Customer Decision Hub. It contains documentation on strategy shapes, extension points, rule structures, container payload definitions, and integration options for external systems."
+  }
+}

@@ -1,0 +1,140 @@
+<!-- Glassmorphic Portfolio Modal Overlay -->
+<div id="portfolio-modal" class="modal-overlay" onclick="closePortfolioModalViaOverlay(event)">
+    <div class="modal-card" style="max-width: 680px; max-height: 85vh; overflow-y: auto; text-align: left; padding: 2rem;">
+        <button class="modal-close-btn" onclick="closePortfolioModal()"><i class="fa-solid fa-xmark"></i></button>
+        
+        <div class="card-header" style="border-bottom: none; margin-bottom: 1.5rem; padding-bottom: 0; display: flex; align-items: center; gap: 0.75rem;">
+            <i class="fa-solid fa-user-tie" style="color: var(--text-main); font-size: 1.5rem;"></i>
+            <h2>Jaswanth Naraharisetty</h2>
+        </div>
+
+        <div style="display: flex; flex-direction: column; align-items: center; text-align: center; background: var(--bg-sub); border: 1px solid var(--border-color); border-radius: 8px; padding: 2rem; margin-bottom: 1.5rem; transition: var(--transition);">
+            <div id="avatar-container" style="position: relative; width: 90px; height: 90px; margin-bottom: 1.25rem;">
+                <img src="/api/profile/image" style="width: 90px; height: 90px; border-radius: 50%; object-fit: cover; border: 1px solid var(--border-color);" alt="Jaswanth" onerror="this.style.display='none'; document.getElementById('fallback-avatar').style.display='flex';">
+                <div id="fallback-avatar" style="width: 90px; height: 90px; border-radius: 50%; background: var(--primary); display: none; align-items: center; justify-content: center; font-size: 2.3rem; color: var(--primary-text); font-weight: 700; position: absolute; top: 0; left: 0;">
+                    JN
+                </div>
+            </div>
+            
+            <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.4rem; font-weight: 700; margin-bottom: 0.3rem; color: var(--text-main);">Software Engineer & Architect</h3>
+            <p style="color: var(--text-sub); font-weight: 500; font-size: 0.9rem; margin-bottom: 1.25rem; letter-spacing: 0.02em;">Specializing in Pega CDH & Java</p>
+            
+            <p style="color: var(--text-sub); font-size: 0.9rem; line-height: 1.6; max-width: 520px; margin-bottom: 1.5rem; text-align: justify;">
+                IT professional with 10 years of experience specializing in Pega CDH and Java, with strong expertise in customer decisioning, AI-driven automation, and business process optimization. Certified Pega CSA, CSSA, and CPDC. Experienced in delivering large-scale banking and decisioning solutions for European clients.
+            </p>
+
+            <div class="profile-details-grid" style="width: 100%; border-top: 1px solid var(--border-color); padding-top: 1.25rem; margin-bottom: 1.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; text-align: left;">
+                <div>
+                    <span style="display: block; font-size: 0.72rem; color: var(--text-sub); text-transform: uppercase; font-weight: 600; margin-bottom: 0.3rem; letter-spacing: 0.05em;">Education</span>
+                    <span style="font-size: 0.88rem; font-weight: 600; color: var(--text-main);">ECE, K.L. University</span>
+                </div>
+                <div>
+                    <span style="display: block; font-size: 0.72rem; color: var(--text-sub); text-transform: uppercase; font-weight: 600; margin-bottom: 0.3rem; letter-spacing: 0.05em;">Specialty</span>
+                    <span style="font-size: 0.88rem; font-weight: 600; color: var(--text-main);">System Integration & AI</span>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 1rem; justify-content: center; width: 100%; flex-wrap: wrap; margin-bottom: 1rem;">
+                <a href="https://www.linkedin.com/in/jaswanth-naraharisetty-07252a93/" target="_blank" class="btn" style="flex: 1; min-width: 130px; background: #0077b5; padding: 0.75rem; font-size: 0.9rem; border-radius: 8px; text-decoration: none; color: #ffffff; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: var(--transition);">
+                    <i class="fa-brands fa-linkedin"></i> LinkedIn
+                </a>
+                <a href="https://www.instagram.com/jaswanth_naraharisetty/" target="_blank" class="btn" style="flex: 1; min-width: 130px; background: #e1306c; color: #ffffff; padding: 0.75rem; font-size: 0.9rem; border-radius: 8px; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: var(--transition);">
+                    <i class="fa-brands fa-instagram"></i> Instagram
+                </a>
+            </div>
+            <button onclick="closePortfolioModal(); openContactModal();" class="btn" style="width: 100%; padding: 0.75rem; font-size: 0.9rem; border-radius: 8px; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: var(--transition);">
+                <i class="fa-solid fa-paper-plane"></i> Contact Us
+            </button>
+        </div>
+
+        <!-- Professional Experience section embedded inside Modal -->
+        <div id="experience-section">
+            <div class="card-header" style="border-bottom: none; margin-bottom: 1rem; padding-bottom: 0; display: flex; justify-content: space-between; align-items: center;">
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                    <i class="fa-solid fa-briefcase" style="color: var(--text-main);"></i>
+                    <h3>Professional Experience</h3>
+                </div>
+            </div>
+
+            <div style="background: var(--bg-sub); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.5rem; transition: var(--transition);">
+                <div class="timeline">
+                    <!-- HSBC -->
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <div class="timeline-date">
+                                <span>Aug 2025 - Present</span>
+                                <span class="timeline-badge">11 mos</span>
+                            </div>
+                            <div class="timeline-company">
+                                <i class="fa-solid fa-building-columns" style="color: #ff0000; font-size: 0.95rem;"></i> HSBC
+                            </div>
+                            <div class="timeline-role">Consulting Specialist</div>
+                            <div class="timeline-meta">
+                                <span><i class="fa-solid fa-circle"></i> Full-time</span>
+                                <span><i class="fa-solid fa-location-dot"></i> Hyderabad, India</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pegasystems -->
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <div class="timeline-date">
+                                <span>Apr 2020 - Jul 2025</span>
+                                <span class="timeline-badge">5 yrs 4 mos</span>
+                            </div>
+                            <div class="timeline-company">
+                                <i class="fa-solid fa-cubes" style="color: #005691; font-size: 0.95rem;"></i> Pegasystems
+                            </div>
+                            
+                            <div style="margin-bottom: 0.5rem;">
+                                <div class="timeline-role">Senior Software Engineer</div>
+                                <div style="font-size: 0.75rem; color: var(--text-sub);">Apr 2024 - Jul 2025</div>
+                            </div>
+                            <div>
+                                <div class="timeline-role">Software Engineer</div>
+                                <div style="font-size: 0.75rem; color: var(--text-sub);">Apr 2020 - Apr 2024</div>
+                            </div>
+
+                            <div class="timeline-meta" style="margin-top: 0.5rem;">
+                                <span><i class="fa-solid fa-circle"></i> Full-time</span>
+                                <span><i class="fa-solid fa-location-dot"></i> Hyderabad, India</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Merilytics Inc. -->
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <div class="timeline-date">
+                                <span>Jul 2016 - Apr 2020</span>
+                                <span class="timeline-badge">3 yrs 10 mos</span>
+                            </div>
+                            <div class="timeline-company">
+                                <i class="fa-solid fa-chart-line" style="color: #a855f7; font-size: 0.95rem;"></i> Merilytics Inc.
+                            </div>
+                            <div style="margin-bottom: 0.5rem;">
+                                <div class="timeline-role">Analyst</div>
+                                <div style="font-size: 0.75rem; color: var(--text-sub);">Oct 2019 - Apr 2020</div>
+                            </div>
+                            <div style="margin-bottom: 0.5rem;">
+                                <div class="timeline-role">Senior Technical Associate</div>
+                                <div style="font-size: 0.75rem; color: var(--text-sub);">Oct 2017 - Oct 2019</div>
+                            </div>
+                            <div>
+                                <div class="timeline-role">Technical Analyst</div>
+                                <div style="font-size: 0.75rem; color: var(--text-sub);">Jul 2016 - Sep 2017</div>
+                            </div>
+                            <div class="timeline-meta" style="margin-top: 0.5rem;">
+                                <span><i class="fa-solid fa-location-dot"></i> Hyderabad, India</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

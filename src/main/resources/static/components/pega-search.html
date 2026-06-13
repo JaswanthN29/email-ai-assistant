@@ -1,0 +1,264 @@
+<!-- Pega CDH Search Component -->
+<div id="pega-search-section" style="animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1); display: block;">
+    <style>
+        /* Apple Styled Search Wrapper */
+        .pega-search-wrapper {
+            position: relative;
+            background: var(--bg-sub);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 0.3rem 0.3rem 0.3rem 1.25rem;
+            display: flex;
+            align-items: center;
+            transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+            margin-bottom: 1.5rem;
+        }
+
+        .pega-search-wrapper:hover {
+            border-color: var(--border-hover);
+        }
+
+        .pega-search-wrapper:focus-within {
+            background: var(--card-bg);
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+        }
+
+        .pega-search-icon {
+            color: var(--text-sub);
+            font-size: 1rem;
+        }
+
+        .pega-search-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: var(--text-main);
+            font-family: inherit;
+            font-size: 1rem;
+            padding: 0.75rem 0.75rem;
+            width: 100%;
+            font-weight: 400;
+        }
+
+        .pega-search-input::placeholder {
+            color: var(--text-sub);
+            opacity: 0.7;
+        }
+
+        .pega-ask-button {
+            background: var(--primary);
+            color: var(--primary-text);
+            border: none;
+            border-radius: 8px;
+            width: 38px;
+            height: 38px;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pega-ask-button:hover {
+            background: var(--primary-hover);
+        }
+
+        .pega-ask-button:active {
+            transform: scale(0.96);
+        }
+
+        .pega-suggestions-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: -0.75rem;
+            margin-bottom: 1.75rem;
+            justify-content: center;
+        }
+
+        .pega-suggestion-pill {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 99px;
+            padding: 0.45rem 1rem;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--text-sub);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .pega-suggestion-pill:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: rgba(37, 99, 235, 0.05);
+            transform: translateY(-1px);
+        }
+
+        /* Results Box */
+        .pega-results-box {
+            display: none;
+            flex-direction: column;
+            gap: 1.25rem;
+            animation: pegaSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            margin-top: 1.5rem;
+        }
+
+        @keyframes pegaSlideUp {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Short Summary Section */
+        .pega-summary-card {
+            background: var(--bg-sub);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border-left: 4px solid var(--accent);
+        }
+
+        .pega-summary-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .pega-summary-text {
+            font-size: 1.05rem;
+            line-height: 1.6;
+            color: var(--text-main);
+            font-weight: 500;
+        }
+
+        /* Collapsible Drawer for Long Summary */
+        .pega-accordion-wrapper {
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+            background: var(--card-bg);
+        }
+
+        .pega-accordion-header {
+            width: 100%;
+            padding: 1.1rem 1.5rem;
+            background: transparent;
+            border: none;
+            color: var(--text-main);
+            font-family: inherit;
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-align: left;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s ease;
+        }
+
+        .pega-accordion-header:hover {
+            background: var(--bg-sub);
+        }
+
+        .pega-accordion-header i {
+            font-size: 0.85rem;
+            color: var(--text-sub);
+            transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .pega-accordion-header.active i {
+            transform: rotate(180deg);
+            color: var(--accent);
+        }
+
+        .pega-accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+            border-top: 0 solid var(--border-color);
+            background: var(--bg-sub);
+        }
+
+        .pega-accordion-content.active {
+            border-top-width: 1px;
+        }
+
+        .pega-accordion-inner {
+            padding: 1.25rem 1.5rem;
+            font-size: 0.95rem;
+            line-height: 1.65;
+            color: var(--text-main);
+            white-space: pre-wrap;
+        }
+
+        /* Loader */
+        .pega-loader {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            margin: 1.5rem auto;
+        }
+
+        .pega-spinner {
+            width: 28px;
+            height: 28px;
+            border: 2.5px solid rgba(37, 99, 235, 0.1);
+            border-radius: 50%;
+            border-top-color: var(--accent);
+            animation: pegaSpin 0.8s linear infinite;
+        }
+
+        @keyframes pegaSpin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+
+    <div class="card-header" style="border-bottom: none; margin-bottom: 1.5rem; padding-bottom: 0;">
+        <i class="fa-solid fa-magnifying-glass" style="color: var(--text-main);"></i>
+        <h2>Pega CDH Search</h2>
+    </div>
+
+    <div class="pega-search-wrapper">
+        <i class="fa-solid fa-magnifying-glass pega-search-icon"></i>
+        <input type="text" id="pega-query-input" class="pega-search-input" placeholder="e.g. How does the arbitration score formula P * C * V * L work?" autocomplete="off">
+        <button id="pega-search-btn" class="pega-ask-button" onclick="performPegaQuery()">
+            <i class="fa-solid fa-arrow-up"></i>
+        </button>
+    </div>
+    
+    <div class="pega-suggestions-container">
+        <button class="pega-suggestion-pill" onclick="fillAndSearchPega('How does the arbitration score formula P * C * V * L work?')">Arbitration Score</button>
+        <button class="pega-suggestion-pill" onclick="fillAndSearchPega('What are the types of contact policies in CDH?')">Contact Policies</button>
+        <button class="pega-suggestion-pill" onclick="fillAndSearchPega('What is Next-Best-Action Designer?')">Next-Best-Action</button>
+    </div>
+
+    <div class="pega-loader" id="pega-loader">
+        <div class="pega-spinner"></div>
+        <p style="color: var(--text-sub); font-size: 0.85rem; font-weight: 500;">Searching vector records...</p>
+    </div>
+
+    <div class="pega-results-box" id="pega-results-box">
+        <!-- Short Summary -->
+        <div class="pega-summary-card">
+            <div class="pega-summary-title">Short Summary</div>
+            <div class="pega-summary-text" id="pega-short-text"></div>
+        </div>
+
+        <!-- Long Summary Collapsible -->
+        <div class="pega-accordion-wrapper">
+            <button class="pega-accordion-header" id="pega-accordion-btn" onclick="togglePegaAccordion()">
+                <span>Detailed Analysis</span>
+                <i class="fa-solid fa-chevron-down"></i>
+            </button>
+            <div class="pega-accordion-content" id="pega-accordion-content">
+                <div class="pega-accordion-inner" id="pega-long-text"></div>
+            </div>
+        </div>
+    </div>
+</div>

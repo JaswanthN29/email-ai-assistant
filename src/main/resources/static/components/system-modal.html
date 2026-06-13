@@ -1,0 +1,96 @@
+<!-- Glassmorphic System Info Modal Overlay -->
+<div id="system-modal" class="modal-overlay" onclick="closeSystemModalViaOverlay(event)">
+    <div class="modal-card" style="max-width: 600px;">
+        <button class="modal-close-btn" onclick="closeSystemModal()"><i class="fa-solid fa-xmark"></i></button>
+        <div class="card-header" style="border-bottom: none; margin-bottom: 1.5rem; padding-bottom: 0;">
+            <i class="fa-solid fa-server" style="color: var(--accent-green);"></i>
+            <h2 style="color: var(--accent-green);">System Diagnostics</h2>
+        </div>
+
+        <div class="info-grid" style="text-align: left;">
+            <!-- Core Specs -->
+            <div class="info-section">
+                <h3><i class="fa-solid fa-code-branch"></i> Core Runtime</h3>
+                <div class="info-item">
+                    <span class="info-label">App Name</span>
+                    <span class="info-value">email-ai-assistant</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Framework</span>
+                    <span class="info-value">Spring Boot 3.5.0</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">JDK Version</span>
+                    <span class="info-value">Java 21</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Port Active</span>
+                    <span class="info-value">8080</span>
+                </div>
+            </div>
+
+            <!-- Database Specs -->
+            <div class="info-section">
+                <h3><i class="fa-solid fa-database"></i> Database</h3>
+                <div class="info-item">
+                    <span class="info-label">Database</span>
+                    <span class="info-value">PostgreSQL</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Host</span>
+                    <span class="info-value">AWS Neon Cloud</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Auto-DDL</span>
+                    <span class="info-value">update</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">User</span>
+                    <span class="info-value">neondb_owner</span>
+                </div>
+            </div>
+
+            <!-- Integrations -->
+            <div class="info-section">
+                <h3><i class="fa-solid fa-share-nodes"></i> Integrations</h3>
+                <div class="info-item">
+                    <span class="info-label">Telegram API</span>
+                    <span class="info-value">Active (Bot)</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Chat ID</span>
+                    <span class="info-value">978757852</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Gmail OAuth</span>
+                    <span class="info-value">Active (Port 8888)</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">HTTP Client</span>
+                    <span class="info-value">RestClient (Spring)</span>
+                </div>
+            </div>
+
+            <!-- Logs & Logging -->
+            <div class="info-section">
+                <h3><i class="fa-solid fa-list-check"></i> Diagnostics</h3>
+                <div class="info-item">
+                    <span class="info-label">Log Level</span>
+                    <span class="info-value">DEBUG</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Log Path</span>
+                    <span class="info-value">logs/email-ai-assistant.log</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">SQL Output</span>
+                    <span class="info-value">Enabled (Show SQL)</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Access Logs</span>
+                    <span class="info-value">Enabled (Tomcat)</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,101 @@
+<!-- System Diagnostics Page -->
+<div id="diagnostics-section" style="animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);">
+    <div class="card-header" style="border-bottom: none; margin-bottom: 1.5rem; padding-bottom: 0; display: flex; align-items: center; gap: 0.75rem;">
+        <i class="fa-solid fa-server" style="color: var(--accent-green); font-size: 1.5rem;"></i>
+        <h2 style="color: var(--accent-green);">System Diagnostics</h2>
+    </div>
+
+    <div class="info-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; text-align: left;">
+        <!-- Core Specs -->
+        <div class="info-section" style="background: var(--bg-sub); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.5rem; transition: var(--transition);">
+            <h3 style="font-size: 1.05rem; font-weight: 600; margin-bottom: 1rem; color: var(--text-main); display: flex; align-items: center; gap: 0.5rem;">
+                <i class="fa-solid fa-code-branch" style="color: var(--accent);"></i> Core Runtime
+            </h3>
+            <div class="info-item" style="display: flex; justify-content: space-between; border-bottom: 1px dashed var(--border-color); padding: 0.6rem 0; font-size: 0.9rem;">
+                <span class="info-label" style="color: var(--text-sub);">App Name</span>
+                <span class="info-value" style="font-weight: 600; color: var(--text-main);">email-ai-assistant</span>
+            </div>
+            <div class="info-item" style="display: flex; justify-content: space-between; border-bottom: 1px dashed var(--border-color); padding: 0.6rem 0; font-size: 0.9rem;">
+                <span class="info-label" style="color: var(--text-sub);">Framework</span>
+                <span class="info-value" style="font-weight: 600; color: var(--text-main);">Spring Boot 3.5.0</span>
+            </div>
+            <div class="info-item" style="display: flex; justify-content: space-between; border-bottom: 1px dashed var(--border-color); padding: 0.6rem 0; font-size: 0.9rem;">
+                <span class="info-label" style="color: var(--text-sub);">JDK Version</span>
+                <span class="info-value" style="font-weight: 600; color: var(--text-main);">Java 21</span>
+            </div>
+            <div class="info-item" style="display: flex; justify-content: space-between; padding: 0.6rem 0; font-size: 0.9rem;">
+                <span class="info-label" style="color: var(--text-sub);">Port Active</span>
+                <span class="info-value" style="font-weight: 600; color: var(--text-main);">8080</span>
+            </div>
+        </div>
+
+        <!-- Database Specs -->
+        <div class="info-section" style="background: var(--bg-sub); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.5rem; transition: var(--transition);">
+            <h3 style="font-size: 1.05rem; font-weight: 600; margin-bottom: 1rem; color: var(--text-main); display: flex; align-items: center; gap: 0.5rem;">
+                <i class="fa-solid fa-database" style="color: var(--accent-green);"></i> Database
+            </h3>
+            <div class="info-item" style="display: flex; justify-content: space-between; border-bottom: 1px dashed var(--border-color); padding: 0.6rem 0; font-size: 0.9rem;">
+                <span class="info-label" style="color: var(--text-sub);">Database</span>
+                <span class="info-value" style="font-weight: 600; color: var(--text-main);">PostgreSQL</span>
+            </div>
+            <div class="info-item" style="display: flex; justify-content: space-between; border-bottom: 1px dashed var(--border-color); padding: 0.6rem 0; font-size: 0.9rem;">
+                <span class="info-label" style="color: var(--text-sub);">Host</span>
+                <span class="info-value" style="font-weight: 600; color: var(--text-main);">AWS Neon Cloud</span>
+            </div>
+            <div class="info-item" style="display: flex; justify-content: space-between; border-bottom: 1px dashed var(--border-color); padding: 0.6rem 0; font-size: 0.9rem;">
+                <span class="info-label" style="color: var(--text-sub);">Auto-DDL</span>
+                <span class="info-value" style="font-weight: 600; color: var(--text-main);">update</span>
+            </div>
+            <div class="info-item" style="display: flex; justify-content: space-between; padding: 0.6rem 0; font-size: 0.9rem;">
+                <span class="info-label" style="color: var(--text-sub);">User</span>
+                <span class="info-value" style="font-weight: 600; color: var(--text-main);">neondb_owner</span>
+            </div>
+        </div>
+
+        <!-- Integrations -->
+        <div class="info-section" style="background: var(--bg-sub); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.5rem; transition: var(--transition);">
+            <h3 style="font-size: 1.05rem; font-weight: 600; margin-bottom: 1rem; color: var(--text-main); display: flex; align-items: center; gap: 0.5rem;">
+                <i class="fa-solid fa-share-nodes" style="color: var(--accent-red);"></i> Integrations
+            </h3>
+            <div class="info-item" style="display: flex; justify-content: space-between; border-bottom: 1px dashed var(--border-color); padding: 0.6rem 0; font-size: 0.9rem;">
+                <span class="info-label" style="color: var(--text-sub);">Telegram API</span>
+                <span class="info-value" style="font-weight: 600; color: var(--text-main);">Active (Bot)</span>
+            </div>
+            <div class="info-item" style="display: flex; justify-content: space-between; border-bottom: 1px dashed var(--border-color); padding: 0.6rem 0; font-size: 0.9rem;">
+                <span class="info-label" style="color: var(--text-sub);">Chat ID</span>
+                <span class="info-value" style="font-weight: 600; color: var(--text-main);">978757852</span>
+            </div>
+            <div class="info-item" style="display: flex; justify-content: space-between; border-bottom: 1px dashed var(--border-color); padding: 0.6rem 0; font-size: 0.9rem;">
+                <span class="info-label" style="color: var(--text-sub);">Gmail OAuth</span>
+                <span class="info-value" style="font-weight: 600; color: var(--text-main);">Active (Port 8888)</span>
+            </div>
+            <div class="info-item" style="display: flex; justify-content: space-between; padding: 0.6rem 0; font-size: 0.9rem;">
+                <span class="info-label" style="color: var(--text-sub);">HTTP Client</span>
+                <span class="info-value" style="font-weight: 600; color: var(--text-main);">RestClient (Spring)</span>
+            </div>
+        </div>
+
+        <!-- Logs & Logging -->
+        <div class="info-section" style="background: var(--bg-sub); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.5rem; transition: var(--transition);">
+            <h3 style="font-size: 1.05rem; font-weight: 600; margin-bottom: 1rem; color: var(--text-main); display: flex; align-items: center; gap: 0.5rem;">
+                <i class="fa-solid fa-list-check" style="color: #a855f7;"></i> Diagnostics
+            </h3>
+            <div class="info-item" style="display: flex; justify-content: space-between; border-bottom: 1px dashed var(--border-color); padding: 0.6rem 0; font-size: 0.9rem;">
+                <span class="info-label" style="color: var(--text-sub);">Log Level</span>
+                <span class="info-value" style="font-weight: 600; color: var(--text-main);">DEBUG</span>
+            </div>
+            <div class="info-item" style="display: flex; justify-content: space-between; border-bottom: 1px dashed var(--border-color); padding: 0.6rem 0; font-size: 0.9rem;">
+                <span class="info-label" style="color: var(--text-sub);">Log Path</span>
+                <span class="info-value" style="font-weight: 600; color: var(--text-main); max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="logs/email-ai-assistant.log">logs/email-ai-assistant.log</span>
+            </div>
+            <div class="info-item" style="display: flex; justify-content: space-between; border-bottom: 1px dashed var(--border-color); padding: 0.6rem 0; font-size: 0.9rem;">
+                <span class="info-label" style="color: var(--text-sub);">SQL Output</span>
+                <span class="info-value" style="font-weight: 600; color: var(--text-main);">Enabled</span>
+            </div>
+            <div class="info-item" style="display: flex; justify-content: space-between; padding: 0.6rem 0; font-size: 0.9rem;">
+                <span class="info-label" style="color: var(--text-sub);">Access Logs</span>
+                <span class="info-value" style="font-weight: 600; color: var(--text-main);">Enabled</span>
+            </div>
+        </div>
+    </div>
+</div>

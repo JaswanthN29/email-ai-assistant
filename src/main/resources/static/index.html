@@ -1,0 +1,1718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jaswanth's Broadcaster</title>
+    <!-- iOS / SF Symbols inspired Typography and Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        })();
+    </script>
+    <style>
+        :root {
+            /* Matte Light Minimalist Palette */
+            --bg-main: #f9fafb;
+            --bg-sub: #fafafa;
+            --card-bg: #ffffff;
+            --border-color: #e4e4e7;
+            --border-hover: #a1a1aa;
+            
+            --primary: #09090b; 
+            --primary-hover: #27272a;
+            --primary-text: #ffffff;
+            
+            --text-main: #09090b;
+            --text-sub: #71717a;
+            
+            --accent: #2563eb; 
+            --accent-green: #16a34a;
+            --accent-red: #dc2626;
+            --overlay-bg: rgba(255, 255, 255, 0.85);
+            
+            --transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        [data-theme="dark"] {
+            /* Sleek Dark Minimalist Palette */
+            --bg-main: #09090b;
+            --bg-sub: #18181b;
+            --card-bg: #18181b;
+            --border-color: #27272a;
+            --border-hover: #52525b;
+            
+            --primary: #ffffff; 
+            --primary-hover: #f4f4f5;
+            --primary-text: #09090b;
+            
+            --text-main: #f4f4f5;
+            --text-sub: #a1a1aa;
+            
+            --accent: #3b82f6; 
+            --accent-green: #22c55e;
+            --accent-red: #ef4444;
+            --overlay-bg: rgba(9, 9, 11, 0.85);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", sans-serif;
+            background: var(--bg-main);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        header {
+            background: rgba(244, 244, 245, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border-color);
+            border-radius: 99px;
+            padding: 0.65rem 2.2rem;
+            width: calc(100% - 3rem);
+            max-width: 960px;
+            margin: 1.5rem auto 0 auto;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
+            position: sticky;
+            top: 1.5rem;
+            z-index: 1000;
+            transition: var(--transition);
+        }
+
+        [data-theme="dark"] header {
+            background: rgba(24, 24, 27, 0.85);
+            border-color: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .header-container {
+            max-width: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            width: 100%;
+        }
+
+        .logo {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .logo i {
+            color: var(--primary);
+        }
+
+        .status-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.45rem;
+            background: rgba(22, 163, 74, 0.08);
+            border: 1px solid rgba(22, 163, 74, 0.2);
+            padding: 0.35rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--accent-green);
+            transition: var(--transition);
+        }
+
+        .status-badge:hover {
+            opacity: 0.85;
+            transform: translateY(-1px);
+        }
+
+        .status-badge:active {
+            transform: translateY(0);
+        }
+
+        .status-badge.offline {
+            background: rgba(220, 38, 38, 0.08);
+            border: 1px solid rgba(220, 38, 38, 0.2);
+            color: var(--accent-red);
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--accent-green);
+        }
+
+        .status-badge.offline .status-dot {
+            background: var(--accent-red);
+        }
+
+        main {
+            flex: 1;
+            max-width: 960px;
+            width: 100%;
+            margin: auto;
+            padding: 3rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        /* Minimalist Premium Light Card */
+        .glass-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03), 0 1px 3px rgba(0, 0, 0, 0.01);
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .card-header {
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding-bottom: 1.25rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .card-header i {
+            font-size: 1.5rem;
+            color: var(--text-main);
+        }
+
+        .card-header h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        /* Minimalist Input Fields */
+        .form-group {
+            margin-bottom: 1.75rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-sub);
+            margin-bottom: 0.6rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .form-control {
+            width: 100%;
+            background: var(--bg-main);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0.95rem 1.25rem 0.95rem 2.85rem;
+            color: var(--text-main);
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+            font-size: 1rem;
+            outline: none;
+            transition: var(--transition);
+            line-height: 1.5;
+        }
+
+        .form-control:focus {
+            border-color: var(--border-hover);
+            background: var(--bg-main);
+        }
+
+        textarea.form-control {
+            min-height: 140px;
+            resize: vertical;
+            padding-top: 0.95rem;
+        }
+
+        .input-wrapper i {
+            position: absolute;
+            left: 1.1rem;
+            top: 1.15rem;
+            color: var(--text-sub);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-control:focus + i {
+            color: var(--primary);
+        }
+
+        /* High-Contrast Minimalist Button */
+        .btn {
+            width: 100%;
+            background: var(--primary);
+            color: var(--primary-text);
+            border: none;
+            border-radius: 8px;
+            padding: 1rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.6rem;
+            transition: var(--transition);
+        }
+
+        .btn:hover {
+            background: var(--primary-hover);
+        }
+
+        .btn:active {
+            transform: scale(0.99);
+        }
+
+        /* Response Panel */
+        .response-panel {
+            margin-top: 1.75rem;
+            border-radius: 8px;
+            padding: 1.1rem;
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 0.95rem;
+            display: none;
+            border: 1px solid transparent;
+            animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            line-height: 1.4;
+        }
+
+        .response-panel.success {
+            background: rgba(22, 163, 74, 0.08);
+            border-color: rgba(22, 163, 74, 0.2);
+            color: var(--accent-green);
+            display: block;
+        }
+
+        .response-panel.error {
+            background: rgba(220, 38, 38, 0.08);
+            border-color: rgba(220, 38, 38, 0.2);
+            color: var(--accent-red);
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        footer {
+            text-align: center;
+            padding: 2.5rem;
+            font-size: 0.8rem;
+            color: var(--text-sub);
+            border-top: 1px solid var(--border-color);
+            background: var(--card-bg);
+        }
+
+        /* Toggle Switches */
+        .toggle-group {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.75rem;
+            background: var(--bg-sub);
+            padding: 0.85rem 1.1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+        }
+
+        .toggle-group:hover {
+            border-color: var(--border-hover);
+        }
+
+        .toggle-label {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--text-main);
+        }
+
+        .toggle-label i {
+            color: var(--text-sub);
+            font-size: 1rem;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #e4e4e7;
+            transition: .2s cubic-bezier(0.16, 1, 0.3, 1);
+            border-radius: 24px;
+            border: 1px solid var(--border-color);
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 3px;
+            bottom: 3px;
+            background-color: #ffffff;
+            transition: .2s cubic-bezier(0.16, 1, 0.3, 1);
+            border-radius: 50%;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        input:checked + .slider {
+            background-color: var(--primary);
+            border-color: transparent;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(20px);
+            background-color: var(--primary-text);
+        }
+
+        /* Tab Navigation */
+        .tabs-nav {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            background: var(--bg-sub);
+            padding: 0.3rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .tab-btn {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--text-sub);
+            padding: 0.75rem 1rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            transition: var(--transition);
+        }
+
+        .tab-btn:hover {
+            color: var(--text-main);
+        }
+
+        .tab-btn.active {
+            color: var(--primary-text);
+            background: var(--primary);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Tech Info Cards */
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.25rem;
+        }
+
+        @media (min-width: 580px) {
+            .info-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .info-section {
+            background: var(--bg-sub);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.35rem;
+            transition: var(--transition);
+        }
+
+        .info-section:hover {
+            border-color: var(--border-hover);
+        }
+
+        .info-section h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin-bottom: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            color: var(--text-main);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.6rem;
+        }
+
+        .info-section h3 i {
+            color: var(--text-sub);
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.88rem;
+            margin-bottom: 0.75rem;
+            line-height: 1.4;
+        }
+
+        .info-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .info-label {
+            color: var(--text-sub);
+            font-weight: 500;
+        }
+
+        .info-value {
+            color: var(--text-main);
+            font-weight: 600;
+            background: var(--border-color);
+            padding: 0.2rem 0.55rem;
+            border-radius: 4px;
+            font-family: monospace;
+            max-width: 190px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* Timeline styling */
+        .timeline {
+            position: relative;
+            max-width: 540px;
+            margin: 2.2rem auto 0 auto;
+            padding: 0;
+            text-align: left;
+        }
+
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 1px;
+            background: var(--border-color);
+            top: 8px;
+            bottom: 8px;
+            left: 20px;
+            margin-left: -0.5px;
+        }
+
+        .timeline-item {
+            padding: 0 0 2rem 40px;
+            position: relative;
+        }
+
+        .timeline-item:last-child {
+            padding-bottom: 0;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--text-sub);
+            left: 20px;
+            margin-left: -4px;
+            top: 8px;
+            z-index: 2;
+            transition: var(--transition);
+        }
+
+        .timeline-item:hover .timeline-dot {
+            transform: scale(1.5);
+            background: var(--primary);
+        }
+
+        .timeline-content {
+            background: var(--bg-sub);
+            border: 1px solid var(--border-color);
+            padding: 1.2rem;
+            border-radius: 8px;
+            transition: var(--transition);
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .timeline-content:hover {
+            border-color: var(--border-hover);
+            background: var(--bg-main);
+        }
+
+        .timeline-chevron {
+            font-size: 0.85rem;
+            color: var(--text-sub);
+            transition: transform 0.2s ease;
+        }
+
+        .timeline-content.expanded .timeline-chevron {
+            transform: rotate(180deg);
+        }
+
+        .timeline-details {
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: max-height 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease, margin-top 0.3s ease;
+            margin-top: 0;
+        }
+
+        .timeline-content.expanded .timeline-details {
+            max-height: 1200px;
+            opacity: 1;
+            margin-top: 0.85rem;
+        }
+
+        .timeline-date {
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--text-sub);
+            margin-bottom: 0.35rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .timeline-company {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 0.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .timeline-role {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 0.4rem;
+        }
+
+        .timeline-meta {
+            font-size: 0.78rem;
+            color: var(--text-sub);
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .timeline-meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .timeline-badge {
+            background: var(--border-color);
+            padding: 0.15rem 0.45rem;
+            border-radius: 4px;
+            font-size: 0.72rem;
+            font-weight: 600;
+        }
+
+        /* Header action button style */
+        .header-action-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 0.45rem 1rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: var(--transition);
+        }
+
+        .header-action-btn:hover {
+            border-color: var(--border-hover);
+            background: var(--bg-sub);
+        }
+
+        .header-action-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* Top Navigation Menu */
+        .top-nav {
+            display: flex;
+            gap: 0.4rem;
+            align-items: center;
+        }
+
+        .nav-link-btn {
+            background: transparent;
+            border: 1px solid transparent;
+            color: var(--text-sub);
+            padding: 0.45rem 1rem;
+            border-radius: 99px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+
+        .nav-link-btn:hover {
+            color: var(--text-main);
+            background: var(--bg-sub);
+            border-color: var(--border-color);
+        }
+
+        .nav-link-btn.active {
+            color: var(--primary-text);
+            background: var(--primary);
+            border-color: var(--primary);
+            border-radius: 99px;
+        }
+
+        /* Desktop Top Nav Dropdowns */
+        .nav-dropdown-group {
+            position: relative;
+            display: inline-block;
+        }
+
+        .nav-dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 120%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 220px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 0.4rem;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+            z-index: 1010;
+            flex-direction: column;
+            gap: 0.2rem;
+        }
+
+        [data-theme="dark"] .nav-dropdown-menu {
+            background: rgba(24, 24, 27, 0.95);
+            border-color: rgba(255, 255, 255, 0.08);
+        }
+
+        .nav-dropdown-menu.active {
+            display: flex;
+        }
+
+        .nav-dropdown-item {
+            background: transparent;
+            border: none;
+            color: var(--text-sub);
+            padding: 0.55rem 0.85rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            transition: var(--transition);
+            width: 100%;
+            text-align: left;
+        }
+
+        .nav-dropdown-item:hover {
+            color: var(--text-main);
+            background: var(--bg-sub);
+        }
+
+        .nav-dropdown-item.active {
+            color: var(--primary-text);
+            background: var(--primary);
+        }
+
+        .nav-dropdown-chevron {
+            font-size: 0.65rem;
+            color: var(--text-sub);
+            transition: transform 0.2s ease;
+        }
+
+        .nav-dropdown-group.active .nav-dropdown-chevron {
+            transform: rotate(180deg);
+        }
+
+        /* Apple.com Style Mobile Menu Overlay & Trigger */
+        .apple-menu-trigger {
+            display: none;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            width: 32px;
+            height: 32px;
+            position: relative;
+            z-index: 1010;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            padding: 0;
+            outline: none;
+        }
+
+        .apple-menu-trigger .line {
+            display: block;
+            width: 18px;
+            height: 1.5px;
+            background-color: var(--text-main);
+            transition: transform 0.22s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.22s ease;
+        }
+
+        .apple-menu-trigger.open .line-1 {
+            transform: translateY(3.25px) rotate(45deg);
+        }
+
+        .apple-menu-trigger.open .line-2 {
+            transform: translateY(-3.25px) rotate(-45deg);
+        }
+
+        #apple-mobile-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            opacity: 0;
+            visibility: hidden;
+            z-index: 999;
+            padding: 7rem 2.5rem 2.5rem 2.5rem;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        [data-theme="dark"] #apple-mobile-menu {
+            background: rgba(9, 9, 11, 0.98);
+        }
+
+        #apple-mobile-menu.open {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .apple-mobile-menu-item {
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: var(--text-main);
+            text-decoration: none;
+            border: none;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.85rem;
+            width: 100%;
+            text-align: left;
+            background: transparent;
+            cursor: pointer;
+            outline: none;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            opacity: 0;
+            transform: translateY(-16px);
+            transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), color 0.2s ease;
+        }
+
+        .apple-mobile-menu-item i {
+            font-size: 1rem;
+            color: var(--text-sub);
+            transition: var(--transition);
+        }
+
+        .apple-mobile-menu-item:hover,
+        .apple-mobile-menu-item.active {
+            color: var(--accent);
+        }
+
+        .apple-mobile-menu-item:hover i,
+        .apple-mobile-menu-item.active i {
+            color: var(--accent);
+            transform: translateX(4px);
+        }
+
+        #apple-mobile-menu.open .apple-mobile-menu-item {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        #apple-mobile-menu.open .apple-mobile-menu-item:nth-child(1) { transition-delay: 0.04s; }
+        #apple-mobile-menu.open .apple-mobile-menu-item:nth-child(2) { transition-delay: 0.08s; }
+        #apple-mobile-menu.open .apple-mobile-menu-item:nth-child(3) { transition-delay: 0.12s; }
+        #apple-mobile-menu.open .apple-mobile-menu-item:nth-child(4) { transition-delay: 0.16s; }
+        #apple-mobile-menu.open .apple-mobile-menu-item:nth-child(5) { transition-delay: 0.20s; }
+
+        /* Modal styling */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--overlay-bg);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2.2rem;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+            transform: scale(0.95);
+            transition: transform 0.25s ease;
+            position: relative;
+        }
+
+        .modal-overlay.active .modal-card {
+            transform: scale(1);
+        }
+
+        .modal-close-btn {
+            position: absolute;
+            top: 1.25rem;
+            right: 1.25rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            width: 28px;
+            height: 28px;
+            border-radius: 4px;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .modal-close-btn:hover {
+            border-color: var(--border-hover);
+        }
+
+        /* Mobile Responsive Layout Enhancements */
+        @media (max-width: 900px) {
+            header {
+                border-radius: 99px !important;
+                padding: 0.5rem 1rem !important;
+            }
+
+            .header-container {
+                flex-wrap: nowrap;
+                gap: 0.5rem;
+            }
+
+            #menu-toggle-btn {
+                display: none !important;
+            }
+            
+            .top-nav {
+                display: none !important;
+            }
+
+            .apple-menu-trigger {
+                display: flex !important;
+            }
+        }
+
+        @media (max-width: 600px) {
+            header {
+                padding: 0.5rem 1.25rem;
+                width: calc(100% - 2rem);
+                top: 1rem;
+                margin-top: 1rem;
+            }
+            main {
+                padding: 2rem 1rem !important;
+            }
+            .glass-card {
+                padding: 1.5rem !important;
+                border-radius: 8px !important;
+            }
+            .card-header h2 {
+                font-size: 1.2rem !important;
+            }
+            .tabs-nav {
+                gap: 0.25rem !important;
+                padding: 0.25rem !important;
+                border-radius: 6px;
+            }
+            .tab-btn {
+                padding: 0.7rem 0.5rem !important;
+                font-size: 0.85rem !important;
+                border-radius: 4px !important;
+            }
+            .timeline {
+                margin: 1.5rem auto 0 auto !important;
+            }
+            .timeline-item {
+                padding-bottom: 1.5rem !important;
+                padding-left: 30px !important;
+            }
+            .timeline-dot {
+                left: 15px !important;
+            }
+            .timeline::after {
+                left: 15px !important;
+            }
+            .timeline-content {
+                padding: 1rem !important;
+                border-radius: 6px !important;
+            }
+            .timeline-company {
+                font-size: 0.95rem !important;
+            }
+            .timeline-role {
+                font-size: 0.85rem !important;
+            }
+            .timeline-badge {
+                font-size: 0.68rem !important;
+            }
+            .modal-card {
+                padding: 1.5rem !important;
+                border-radius: 8px !important;
+                width: 95% !important;
+            }
+            .info-grid {
+                grid-template-columns: 1fr !important;
+                gap: 1rem !important;
+            }
+            .info-section {
+                padding: 1rem !important;
+                border-radius: 6px !important;
+            }
+            .info-value {
+                max-width: 140px !important;
+                font-size: 0.8rem !important;
+            }
+            .profile-details-grid {
+                grid-template-columns: 1fr !important;
+                gap: 1rem !important;
+            }
+        }
+    </style>
+</head>
+<body>
+ 
+
+    <header>
+        <div class="header-container">
+            <h1 class="logo">Jaswanth</h1>
+            
+            <nav class="top-nav">
+                <!-- Details Dropdown -->
+                <div class="nav-dropdown-group" id="nav-details-group">
+                    <button id="nav-details-group-btn" class="nav-link-btn active" onclick="toggleNavDropdown('details-dropdown', event)">
+                        <i class="fa-solid fa-user-gear"></i> Details <i class="fa-solid fa-chevron-down nav-dropdown-chevron"></i>
+                    </button>
+                    <div id="details-dropdown" class="nav-dropdown-menu">
+                        <button id="nav-profile-btn" class="nav-dropdown-item active" onclick="selectViewAndCloseDropdown('profile-view', event)">
+                            <i class="fa-solid fa-user"></i> Personal Details
+                        </button>
+                        <button id="nav-experience-btn" class="nav-dropdown-item" onclick="selectViewAndCloseDropdown('experience-view', event)">
+                            <i class="fa-solid fa-briefcase"></i> Professional Experience
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Search Dropdown -->
+                <div class="nav-dropdown-group" id="nav-search-group">
+                    <button id="nav-search-group-btn" class="nav-link-btn" onclick="toggleNavDropdown('search-dropdown', event)">
+                        <i class="fa-solid fa-magnifying-glass"></i> Search <i class="fa-solid fa-chevron-down nav-dropdown-chevron"></i>
+                    </button>
+                    <div id="search-dropdown" class="nav-dropdown-menu">
+                        <button id="nav-pega-btn" class="nav-dropdown-item" onclick="selectViewAndCloseDropdown('pega-view', event)">
+                            <i class="fa-solid fa-database"></i> Pega CDH Search
+                        </button>
+                    </div>
+                </div>
+
+                <!-- System Dropdown -->
+                <div class="nav-dropdown-group" id="nav-system-group">
+                    <button id="nav-system-group-btn" class="nav-link-btn" onclick="toggleNavDropdown('system-dropdown', event)">
+                        <i class="fa-solid fa-gears"></i> System <i class="fa-solid fa-chevron-down nav-dropdown-chevron"></i>
+                    </button>
+                    <div id="system-dropdown" class="nav-dropdown-menu">
+                        <button id="nav-diagnostics-btn" class="nav-dropdown-item" onclick="selectViewAndCloseDropdown('diagnostics-view', event)">
+                            <i class="fa-solid fa-server"></i> System Diagnostics
+                        </button>
+                        <button id="nav-timeline-btn" class="nav-dropdown-item" onclick="selectViewAndCloseDropdown('timeline-view', event)">
+                            <i class="fa-solid fa-clock-rotate-left"></i> Timeline
+                        </button>
+                    </div>
+                </div>
+            </nav>
+
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                <button id="theme-toggle-btn" class="header-action-btn" onclick="toggleTheme()" title="Toggle Theme" style="padding: 0; width: 34px; height: 34px; display: flex; justify-content: center; align-items: center; border-radius: 50%;">
+                    <i id="theme-icon" class="fa-solid fa-moon"></i>
+                </button>
+                <button id="apple-menu-trigger" class="apple-menu-trigger" onclick="toggleAppleMenu()" title="Toggle Menu">
+                    <span class="line line-1"></span>
+                    <span class="line line-2"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Apple.com Style Mobile Menu Overlay -->
+    <div id="apple-mobile-menu">
+        <button id="apple-menu-profile" class="apple-mobile-menu-item active" onclick="selectAppleMobileView('profile-view')">
+            Personal Details <i class="fa-solid fa-chevron-right"></i>
+        </button>
+        <button id="apple-menu-experience" class="apple-mobile-menu-item" onclick="selectAppleMobileView('experience-view')">
+            Professional Experience <i class="fa-solid fa-chevron-right"></i>
+        </button>
+        <button id="apple-menu-pega" class="apple-mobile-menu-item" onclick="selectAppleMobileView('pega-view')">
+            Pega CDH Search <i class="fa-solid fa-chevron-right"></i>
+        </button>
+        <button id="apple-menu-diagnostics" class="apple-mobile-menu-item" onclick="selectAppleMobileView('diagnostics-view')">
+            System Diagnostics <i class="fa-solid fa-chevron-right"></i>
+        </button>
+        <button id="apple-menu-timeline" class="apple-mobile-menu-item" onclick="selectAppleMobileView('timeline-view')">
+            Timeline <i class="fa-solid fa-chevron-right"></i>
+        </button>
+    </div>
+
+    <main>
+        <section class="glass-card">
+            <!-- Views Container -->
+            <div id="profile-view" class="view-content" style="display: block;">
+                <div id="profile-tab-placeholder"></div>
+            </div>
+            
+            <div id="experience-view" class="view-content" style="display: none;">
+                <div id="experience-tab-placeholder"></div>
+            </div>
+            
+            <div id="pega-view" class="view-content" style="display: none;">
+                <div id="pega-search-placeholder"></div>
+            </div>
+            
+            <div id="diagnostics-view" class="view-content" style="display: none;">
+                <div id="diagnostics-tab-placeholder"></div>
+            </div>
+
+            <div id="timeline-view" class="view-content" style="display: none;">
+                <div id="timeline-tab-placeholder"></div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modals Placeholders (Dynamically Loaded) -->
+    <div id="system-modal-placeholder"></div>
+    <div id="contact-modal-placeholder"></div>
+
+    <footer>
+        &copy; 2026 Jaswanth's Broadcaster - Designed with premium iOS Glassmorphism.
+    </footer>
+
+    <script>
+
+        // Theme Toggling Logic
+        function updateThemeIcon(theme) {
+            const icon = document.getElementById('theme-icon');
+            if (!icon) return;
+            if (theme === 'dark') {
+                icon.className = 'fa-solid fa-sun';
+            } else {
+                icon.className = 'fa-solid fa-moon';
+            }
+        }
+
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon(newTheme);
+        }
+
+        function toggleExperienceDetail() {
+            const container = document.getElementById('experience-details-container');
+            const icon = document.getElementById('toggle-experience-icon');
+            const text = document.getElementById('toggle-experience-text');
+            if (!container) return;
+            
+            if (container.style.display === 'none' || container.style.display === '') {
+                container.style.display = 'block';
+                if (icon) icon.className = 'fa-solid fa-chevron-up';
+                if (text) text.innerText = 'Hide';
+            } else {
+                container.style.display = 'none';
+                if (icon) icon.className = 'fa-solid fa-chevron-down';
+                if (text) text.innerText = 'Show';
+            }
+        }
+
+        // Component Loader Helper
+        async function loadComponent(placeholderId, fileUrl) {
+            try {
+                const response = await fetch(fileUrl);
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                const html = await response.text();
+                const placeholder = document.getElementById(placeholderId);
+                if (placeholder) {
+                    placeholder.outerHTML = html;
+                }
+            } catch (error) {
+                console.error(`Error loading component: ${fileUrl}`, error);
+            }
+        }
+
+        // Initialize application components
+        async function init() {
+
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+            updateThemeIcon(currentTheme);
+
+            await Promise.all([
+                loadComponent('profile-tab-placeholder', '/components/profile.html'),
+                loadComponent('experience-tab-placeholder', '/components/experience.html'),
+                loadComponent('pega-search-placeholder', '/components/pega-search.html'),
+                loadComponent('diagnostics-tab-placeholder', '/components/system-diagnostics.html'),
+                loadComponent('timeline-tab-placeholder', '/components/app-timeline.html'),
+                loadComponent('contact-modal-placeholder', '/components/contact-modal.html')
+            ]);
+
+            bindTelegramForm();
+            checkHealth();
+            
+            // Add keypress handler to the search input once loaded
+            document.addEventListener('keypress', function (e) {
+                if (e.key === 'Enter' && e.target && e.target.id === 'pega-query-input') {
+                    performPegaQuery();
+                }
+            });
+        }
+
+        window.addEventListener('DOMContentLoaded', init);
+
+        // System Health Monitor
+        async function checkHealth() {
+            const badge = document.getElementById('health-badge');
+            if (!badge) return;
+            try {
+                const res = await fetch('/health');
+                const data = await res.json();
+                if (data && data.status === 'Running') {
+                    badge.classList.remove('offline');
+                } else {
+                    throw new Error('Offline');
+                }
+            } catch (e) {
+                badge.classList.add('offline');
+            }
+        }
+        setInterval(checkHealth, 15000);
+
+        // Tab Switcher logic
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            
+            const tabEl = document.getElementById(tabId);
+            if (tabEl) tabEl.classList.add('active');
+            
+            const btn = Array.from(document.querySelectorAll('.tab-btn')).find(b => 
+                b.getAttribute('onclick') && b.getAttribute('onclick').includes(tabId)
+            );
+            if (btn) btn.classList.add('active');
+        }
+
+        function switchAppTab(tabId) {
+            // Remove active classes from all tab contents and buttons
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            
+            // Activate selected tab content
+            const selectedTab = document.getElementById(tabId);
+            if (selectedTab) selectedTab.classList.add('active');
+            
+            // Set button styling active
+            if (tabId === 'portfolio-tab') {
+                document.getElementById('tab-portfolio-btn').classList.add('active');
+            } else if (tabId === 'pega-tab') {
+                document.getElementById('tab-pega-btn').classList.add('active');
+                // Ensure search section is actually block-displayed
+                const section = document.getElementById('pega-search-section');
+                if (section) section.style.display = 'block';
+            }
+        }
+
+        // Pega Search helpers
+        function fillAndSearchPega(question) {
+            const queryInput = document.getElementById('pega-query-input');
+            if (queryInput) {
+                queryInput.value = question;
+                performPegaQuery();
+            }
+        }
+
+        function togglePegaAccordion() {
+            const accordionBtn = document.getElementById('pega-accordion-btn');
+            const accordionContent = document.getElementById('pega-accordion-content');
+            if (!accordionBtn || !accordionContent) return;
+
+            const isActive = accordionBtn.classList.toggle('active');
+            accordionContent.classList.toggle('active');
+            
+            if (isActive) {
+                accordionContent.style.maxHeight = accordionContent.scrollHeight + 'px';
+            } else {
+                accordionContent.style.maxHeight = '0px';
+            }
+        }
+
+        async function performPegaQuery() {
+            const queryInput = document.getElementById('pega-query-input');
+            const loader = document.getElementById('pega-loader');
+            const resultsBox = document.getElementById('pega-results-box');
+            const shortText = document.getElementById('pega-short-text');
+            const longText = document.getElementById('pega-long-text');
+            const accordionBtn = document.getElementById('pega-accordion-btn');
+            const accordionContent = document.getElementById('pega-accordion-content');
+
+            if (!queryInput) return;
+            const query = queryInput.value.trim();
+            if (!query) return;
+
+            // Show loader, hide results
+            if (loader) loader.style.display = 'flex';
+            if (resultsBox) resultsBox.style.display = 'none';
+            
+            // Collapse accordion for new search
+            if (accordionBtn) accordionBtn.classList.remove('active');
+            if (accordionContent) {
+                accordionContent.classList.remove('active');
+                accordionContent.style.maxHeight = '0px';
+            }
+
+            try {
+                const response = await fetch(`/api/docs/query?q=${encodeURIComponent(query)}`);
+                const data = await response.json();
+
+                if (response.ok) {
+                    const fullAnswer = data.answer || '';
+                    
+                    // Summarize into Short and Long Summaries
+                    const summaries = splitSummary(fullAnswer);
+                    
+                    if (shortText) shortText.textContent = summaries.short;
+                    if (longText) longText.textContent = summaries.long;
+
+                    // Display results
+                    if (resultsBox) resultsBox.style.display = 'flex';
+                } else {
+                    alert(`Error: ${data.error || 'Failed to fetch query'}`);
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Connection error occurred while querying the server.');
+            } finally {
+                if (loader) loader.style.display = 'none';
+            }
+        }
+
+        // Helper to divide text into short (first 2 sentences) and long (full text)
+        function splitSummary(text) {
+            if (!text) return { short: 'No response generated.', long: '' };
+            const sentences = text.match(/[^.!?]+[.!?]+(\s|$)/g);
+            if (!sentences || sentences.length <= 2) {
+                return {
+                    short: text,
+                    long: text
+                };
+            }
+            const shortSummary = sentences.slice(0, 2).join('').trim();
+            return {
+                short: shortSummary,
+                long: text
+            };
+        }
+
+        async function loadTimelineEvents() {
+            const container = document.getElementById('db-timeline');
+            if (!container) return;
+
+            try {
+                const res = await fetch('/api/timeline');
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                const events = await res.json();
+
+                if (events && events.length > 0) {
+                    let html = '';
+                    events.forEach(event => {
+                        html += `
+                        <div class="timeline-item">
+                            <div class="timeline-dot" style="background: var(--accent);"></div>
+                            <div class="timeline-content" onclick="this.classList.toggle('expanded')">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem;">
+                                    <div style="flex-grow: 1;">
+                                        <div class="timeline-date" style="margin-bottom: 0.35rem;">
+                                            <span>${event.eventDate}</span>
+                                            <span class="timeline-badge" style="background: ${event.badgeColor || 'rgba(37, 99, 235, 0.1)'}; color: var(--accent);">${event.badge}</span>
+                                        </div>
+                                        <div class="timeline-company" style="margin-bottom: 0;">${event.title}</div>
+                                    </div>
+                                    <i class="fa-solid fa-chevron-down timeline-chevron" style="margin-top: 0.35rem;"></i>
+                                </div>
+                                <div class="timeline-details">
+                                    <div class="timeline-role" style="margin-top: 0.5rem;">${event.subtitle}</div>
+                                    <div class="timeline-meta" style="margin-top: 0.5rem; color: var(--text-sub); font-size: 0.85rem;">
+                                        ${event.description || ''}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        `;
+                    });
+                    container.innerHTML = html;
+                } else {
+                    container.innerHTML = '<div style="text-align: center; padding: 2rem; color: var(--text-sub);">No evolution events found.</div>';
+                }
+            } catch (err) {
+                console.error('Failed to load timeline events', err);
+                container.innerHTML = '<div style="text-align: center; padding: 2rem; color: var(--accent-red);"><i class="fa-solid fa-circle-xmark"></i> Failed to load timeline from database.</div>';
+            }
+        }
+
+        // Apple.com Style Mobile Menu Toggle functions
+        function toggleAppleMenu() {
+            const trigger = document.getElementById('apple-menu-trigger');
+            const menu = document.getElementById('apple-mobile-menu');
+            if (!trigger || !menu) return;
+
+            const isOpen = trigger.classList.toggle('open');
+            menu.classList.toggle('open', isOpen);
+            document.body.style.overflow = isOpen ? 'hidden' : '';
+        }
+
+        function selectAppleMobileView(viewId) {
+            switchView(viewId);
+            toggleAppleMenu();
+        }
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function(e) {
+            // Desktop dropdown click-away
+            const topNav = document.querySelector('.top-nav');
+            if (topNav && !topNav.contains(e.target)) {
+                document.querySelectorAll('.nav-dropdown-menu').forEach(el => {
+                    el.classList.remove('active');
+                    el.parentElement.classList.remove('active');
+                });
+            }
+        });
+
+        // Desktop Top Navigation Dropdown Helpers
+        function toggleNavDropdown(menuId, event) {
+            if (event) event.stopPropagation();
+            
+            document.querySelectorAll('.nav-dropdown-menu').forEach(el => {
+                if (el.id !== menuId) {
+                    el.classList.remove('active');
+                    el.parentElement.classList.remove('active');
+                }
+            });
+
+            const menu = document.getElementById(menuId);
+            if (menu) {
+                const isActive = menu.classList.toggle('active');
+                if (isActive) {
+                    menu.parentElement.classList.add('active');
+                } else {
+                    menu.parentElement.classList.remove('active');
+                }
+            }
+        }
+
+        function selectViewAndCloseDropdown(viewId, event) {
+            if (event) event.stopPropagation();
+            switchView(viewId);
+            
+            document.querySelectorAll('.nav-dropdown-menu').forEach(el => {
+                el.classList.remove('active');
+                el.parentElement.classList.remove('active');
+            });
+        }
+
+        // View Switcher logic
+        function switchView(viewId) {
+            // Hide all views
+            document.querySelectorAll('.view-content').forEach(el => el.style.display = 'none');
+            // Show requested view
+            const targetView = document.getElementById(viewId);
+            if (targetView) targetView.style.display = 'block';
+            
+            // Update active state in top navigation (categories and sub-items)
+            document.querySelectorAll('.top-nav .nav-link-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.nav-dropdown-item').forEach(btn => btn.classList.remove('active'));
+            
+            if (viewId === 'profile-view' || viewId === 'experience-view') {
+                const parentBtn = document.getElementById('nav-details-group-btn');
+                if (parentBtn) parentBtn.classList.add('active');
+                
+                const itemBtn = document.getElementById(viewId === 'profile-view' ? 'nav-profile-btn' : 'nav-experience-btn');
+                if (itemBtn) itemBtn.classList.add('active');
+            } else if (viewId === 'pega-view') {
+                const parentBtn = document.getElementById('nav-search-group-btn');
+                if (parentBtn) parentBtn.classList.add('active');
+                
+                const itemBtn = document.getElementById('nav-pega-btn');
+                if (itemBtn) itemBtn.classList.add('active');
+            } else if (viewId === 'diagnostics-view' || viewId === 'timeline-view') {
+                const parentBtn = document.getElementById('nav-system-group-btn');
+                if (parentBtn) parentBtn.classList.add('active');
+                
+                const itemBtn = document.getElementById(viewId === 'diagnostics-view' ? 'nav-diagnostics-btn' : 'nav-timeline-btn');
+                if (itemBtn) itemBtn.classList.add('active');
+            }
+
+            // Update active state in Apple mobile menu overlay
+            document.querySelectorAll('.apple-mobile-menu-item').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(viewId)) {
+                    btn.classList.add('active');
+                }
+            });
+
+            // Trigger dynamic data fetch for Timeline if active
+            if (viewId === 'timeline-view') {
+                loadTimelineEvents();
+            }
+        }
+
+        function openContactModal() {
+            const modal = document.getElementById('contact-modal');
+            if (modal) modal.classList.add('active');
+        }
+        
+        function closeContactModal() {
+            const modal = document.getElementById('contact-modal');
+            if (modal) modal.classList.remove('active');
+        }
+        
+        function closeContactModalViaOverlay(e) {
+            if (e.target.id === 'contact-modal') {
+                closeContactModal();
+            }
+        }
+
+        function openSystemModal() {
+            const modal = document.getElementById('system-modal');
+            if (modal) modal.classList.add('active');
+        }
+
+        function closeSystemModal() {
+            const modal = document.getElementById('system-modal');
+            if (modal) modal.classList.remove('active');
+        }
+
+        function closeSystemModalViaOverlay(e) {
+            if (e.target.id === 'system-modal') {
+                closeSystemModal();
+            }
+        }
+
+        // Helper to collect browser information
+        function getBrowserDetails() {
+            const ua = navigator.userAgent;
+            let os = "Unknown OS";
+            if (ua.indexOf("Win") !== -1) os = "Windows";
+            else if (ua.indexOf("Mac") !== -1) os = "macOS";
+            else if (ua.indexOf("Linux") !== -1) os = "Linux";
+            else if (ua.indexOf("Android") !== -1) os = "Android";
+            else if (ua.indexOf("like Mac") !== -1) os = "iOS";
+
+            let browser = "Unknown Browser";
+            if (ua.indexOf("Firefox") !== -1) browser = "Firefox";
+            else if (ua.indexOf("SamsungBrowser") !== -1) browser = "Samsung Browser";
+            else if (ua.indexOf("Chrome") !== -1) browser = "Chrome";
+            else if (ua.indexOf("Safari") !== -1) browser = "Safari";
+            else if (ua.indexOf("MSIE") !== -1 || !!document.documentMode) browser = "Internet Explorer";
+            else if (ua.indexOf("Edge") !== -1) browser = "Edge";
+            else if (ua.indexOf("Opera") !== -1 || ua.indexOf("OPR") !== -1) browser = "Opera";
+
+            return {
+                browser: browser,
+                os: os,
+                screen: `${screen.width}x${screen.height}`,
+                window: `${window.innerWidth}x${window.innerHeight}`,
+                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || "Unknown",
+                localTime: new Date().toLocaleString(),
+                language: navigator.language || "Unknown"
+            };
+        }
+
+        // Telegram Message Sender logic
+        function bindTelegramForm() {
+            const form = document.getElementById('telegram-form');
+            if (!form) return;
+
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const btn = document.getElementById('send-btn');
+                const btnContent = document.getElementById('btn-content');
+                const responsePanel = document.getElementById('telegram-response');
+                const nameInput = document.getElementById('contact-name').value.trim();
+                const textInput = document.getElementById('message-text').value.trim();
+                const attachDetails = document.getElementById('attach-details-toggle').checked;
+                
+                let text = `👤 Sender Name: ${nameInput}\n💬 Message: ${textInput}`;
+                if (attachDetails) {
+                    const details = getBrowserDetails();
+                    text += `\n\n🌐 Device & Browser Details:\n` +
+                            `• Browser: ${details.browser}\n` +
+                            `• OS: ${details.os}\n` +
+                            `• Screen: ${details.screen}\n` +
+                            `• Window: ${details.window}\n` +
+                            `• Timezone: ${details.timezone}\n` +
+                            `• Local Time: ${details.localTime}\n` +
+                            `• Language: ${details.language}`;
+                }
+                
+                btn.disabled = true;
+                btnContent.innerHTML = '<span class="loading-spinner"></span> Sending...';
+                responsePanel.className = 'response-panel';
+                responsePanel.innerText = '';
+
+                try {
+                    const res = await fetch('/telegram/send', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ chatId: "", text })
+                    });
+                    
+                    const data = await res.json();
+                    if (res.ok && data.success) {
+                        responsePanel.className = 'response-panel success';
+                        responsePanel.innerHTML = '<i class="fa-solid fa-circle-check"></i> ' + data.message;
+                        document.getElementById('contact-name').value = '';
+                        document.getElementById('message-text').value = '';
+                        setTimeout(closeContactModal, 2000);
+                    } else {
+                        responsePanel.className = 'response-panel error';
+                        responsePanel.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> ' + (data.error || 'Failed to send message');
+                    }
+                } catch (err) {
+                    responsePanel.className = 'response-panel error';
+                    responsePanel.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> Network error: Unable to reach endpoint';
+                } finally {
+                    btn.disabled = false;
+                    btnContent.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Send Message';
+                }
+            });
+        }
+    </script>
+</body>
+</html>
