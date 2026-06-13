@@ -822,6 +822,82 @@
             transform: rotate(180deg);
         }
 
+        /* Instagram Style User Profile Dropdown */
+        .user-dropdown-group {
+            position: relative;
+            display: inline-block;
+        }
+
+        .profile-avatar-btn {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            transition: var(--transition);
+            color: var(--text-main);
+            font-size: 0.95rem;
+            padding: 0;
+        }
+
+        .profile-avatar-btn:hover {
+            border-color: var(--border-hover);
+            transform: scale(1.05);
+        }
+
+        .profile-avatar-btn.logged-in {
+            border-color: var(--accent);
+            background: rgba(37, 99, 235, 0.1);
+        }
+
+        .profile-avatar-btn i {
+            font-size: 1.05rem;
+        }
+
+        .user-dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 120%;
+            right: 0;
+            width: 180px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 0.4rem;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            z-index: 1010;
+            flex-direction: column;
+            gap: 0.2rem;
+            animation: slideUp 0.2s ease;
+        }
+
+        [data-theme="dark"] .user-dropdown-menu {
+            background: rgba(24, 24, 27, 0.95);
+            border-color: rgba(255, 255, 255, 0.08);
+        }
+
+        .user-dropdown-menu.active {
+            display: flex;
+        }
+
+        .user-dropdown-header {
+            padding: 0.5rem 0.85rem;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--text-sub);
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 0.25rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
         /* Apple.com Style Mobile Menu Overlay & Trigger */
         .apple-menu-trigger {
             display: none;
@@ -1153,9 +1229,20 @@
                 <button id="theme-toggle-btn" class="header-action-btn" onclick="toggleTheme()" title="Toggle Theme" style="padding: 0; width: 34px; height: 34px; display: flex; justify-content: center; align-items: center; border-radius: 50%;">
                     <i id="theme-icon" class="fa-solid fa-moon"></i>
                 </button>
-                <button id="login-trigger-btn" class="header-action-btn" onclick="openLoginModal()" title="Sign In" style="border-radius: 6px; font-size: 0.85rem; font-weight: 600; padding: 0.45rem 1rem;">
-                    <i class="fa-solid fa-right-to-bracket"></i> <span id="login-btn-text">Sign In</span>
-                </button>
+                
+                <!-- Instagram User Dropdown -->
+                <div class="user-dropdown-group" id="user-dropdown-group">
+                    <button id="login-trigger-btn" class="profile-avatar-btn" onclick="toggleUserDropdown(event)" title="Sign In">
+                        <i class="fa-regular fa-user" id="user-avatar-icon"></i>
+                    </button>
+                    <div id="user-dropdown-menu" class="user-dropdown-menu">
+                        <div id="user-dropdown-username" class="user-dropdown-header" style="display: none;">Guest</div>
+                        <button id="user-dropdown-login-btn" class="nav-dropdown-item" onclick="handleUserDropdownAction(event)" style="font-weight: 600;">
+                            <i class="fa-solid fa-right-to-bracket"></i> Sign In
+                        </button>
+                    </div>
+                </div>
+
                 <button id="apple-menu-trigger" class="apple-menu-trigger" onclick="toggleAppleMenu()" title="Toggle Menu">
                     <span class="line line-1"></span>
                     <span class="line line-2"></span>
@@ -1354,9 +1441,17 @@
                     // Update main triggers
                     const triggerBtn = document.getElementById('login-trigger-btn');
                     if (triggerBtn) {
-                        triggerBtn.innerHTML = '<i class="fa-solid fa-right-from-bracket"></i> Sign Out';
-                        triggerBtn.setAttribute('onclick', 'handleSignOut()');
-                        triggerBtn.title = 'Sign Out';
+                        triggerBtn.classList.add('logged-in');
+                        triggerBtn.title = resObj.body.username;
+                    }
+                    const dropdownUsername = document.getElementById('user-dropdown-username');
+                    if (dropdownUsername) {
+                        dropdownUsername.textContent = resObj.body.username;
+                        dropdownUsername.style.display = 'block';
+                    }
+                    const dropdownLoginBtn = document.getElementById('user-dropdown-login-btn');
+                    if (dropdownLoginBtn) {
+                        dropdownLoginBtn.innerHTML = '<i class="fa-solid fa-right-from-bracket"></i> Sign Out';
                     }
                     const mobileTriggerText = document.getElementById('apple-mobile-login-text');
                     if (mobileTriggerText) {
@@ -1369,7 +1464,7 @@
                     
                     document.getElementById('login-username').value = '';
                     document.getElementById('login-password').value = '';
-                    setTimeout(closeLoginModal, 1500);
+                    setTimeout(closeLoginModal, 200);
                 } else {
                     responsePanel.className = 'response-panel error';
                     responsePanel.innerHTML = `<i class="fa-solid fa-circle-xmark"></i> ${resObj.body.message || 'Invalid username or password.'}`;
@@ -1389,9 +1484,17 @@
         function handleSignOut() {
             const triggerBtn = document.getElementById('login-trigger-btn');
             if (triggerBtn) {
-                triggerBtn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> <span id="login-btn-text">Sign In</span>';
-                triggerBtn.setAttribute('onclick', 'openLoginModal()');
+                triggerBtn.classList.remove('logged-in');
                 triggerBtn.title = 'Sign In';
+            }
+            const dropdownUsername = document.getElementById('user-dropdown-username');
+            if (dropdownUsername) {
+                dropdownUsername.textContent = 'Guest';
+                dropdownUsername.style.display = 'none';
+            }
+            const dropdownLoginBtn = document.getElementById('user-dropdown-login-btn');
+            if (dropdownLoginBtn) {
+                dropdownLoginBtn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Sign In';
             }
             const mobileTriggerText = document.getElementById('apple-mobile-login-text');
             if (mobileTriggerText) {
@@ -1400,6 +1503,10 @@
             const mobileTrigger = document.getElementById('apple-menu-login');
             if (mobileTrigger) {
                 mobileTrigger.setAttribute('onclick', 'toggleAppleMenu(); openLoginModal();');
+            }
+            const userMenu = document.getElementById('user-dropdown-menu');
+            if (userMenu) {
+                userMenu.classList.remove('active');
             }
             alert('Successfully signed out.');
         }
@@ -1619,6 +1726,15 @@
                     el.parentElement.classList.remove('active');
                 });
             }
+            
+            // User dropdown click-away
+            const userDropdownGroup = document.getElementById('user-dropdown-group');
+            if (userDropdownGroup && !userDropdownGroup.contains(e.target)) {
+                const userDropdownMenu = document.getElementById('user-dropdown-menu');
+                if (userDropdownMenu) {
+                    userDropdownMenu.classList.remove('active');
+                }
+            }
         });
 
         // Desktop Top Navigation Dropdown Helpers
@@ -1631,6 +1747,11 @@
                     el.parentElement.classList.remove('active');
                 }
             });
+            
+            const userMenu = document.getElementById('user-dropdown-menu');
+            if (userMenu) {
+                userMenu.classList.remove('active');
+            }
 
             const menu = document.getElementById(menuId);
             if (menu) {
@@ -1643,6 +1764,35 @@
             }
         }
 
+        function toggleUserDropdown(event) {
+            if (event) event.stopPropagation();
+            
+            document.querySelectorAll('.nav-dropdown-menu').forEach(el => {
+                el.classList.remove('active');
+                el.parentElement.classList.remove('active');
+            });
+            
+            const menu = document.getElementById('user-dropdown-menu');
+            if (menu) {
+                menu.classList.toggle('active');
+            }
+        }
+
+        function handleUserDropdownAction(event) {
+            if (event) event.stopPropagation();
+            const loginBtn = document.getElementById('user-dropdown-login-btn');
+            const userMenu = document.getElementById('user-dropdown-menu');
+            if (userMenu) {
+                userMenu.classList.remove('active');
+            }
+            
+            if (loginBtn && loginBtn.textContent.includes('Sign Out')) {
+                handleSignOut();
+            } else {
+                openLoginModal();
+            }
+        }
+
         function selectViewAndCloseDropdown(viewId, event) {
             if (event) event.stopPropagation();
             switchView(viewId);
@@ -1651,6 +1801,11 @@
                 el.classList.remove('active');
                 el.parentElement.classList.remove('active');
             });
+            
+            const userMenu = document.getElementById('user-dropdown-menu');
+            if (userMenu) {
+                userMenu.classList.remove('active');
+            }
         }
 
         // View Switcher logic
