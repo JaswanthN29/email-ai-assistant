@@ -1153,6 +1153,9 @@
                 <button id="theme-toggle-btn" class="header-action-btn" onclick="toggleTheme()" title="Toggle Theme" style="padding: 0; width: 34px; height: 34px; display: flex; justify-content: center; align-items: center; border-radius: 50%;">
                     <i id="theme-icon" class="fa-solid fa-moon"></i>
                 </button>
+                <button id="login-trigger-btn" class="header-action-btn" onclick="openLoginModal()" title="Sign In" style="border-radius: 6px; font-size: 0.85rem; font-weight: 600; padding: 0.45rem 1rem;">
+                    <i class="fa-solid fa-right-to-bracket"></i> <span id="login-btn-text">Sign In</span>
+                </button>
                 <button id="apple-menu-trigger" class="apple-menu-trigger" onclick="toggleAppleMenu()" title="Toggle Menu">
                     <span class="line line-1"></span>
                     <span class="line line-2"></span>
@@ -1160,7 +1163,7 @@
             </div>
         </div>
     </header>
-
+ 
     <!-- Apple.com Style Mobile Menu Overlay -->
     <div id="apple-mobile-menu">
         <button id="apple-menu-profile" class="apple-mobile-menu-item active" onclick="selectAppleMobileView('profile-view')">
@@ -1178,8 +1181,11 @@
         <button id="apple-menu-timeline" class="apple-mobile-menu-item" onclick="selectAppleMobileView('timeline-view')">
             Timeline <i class="fa-solid fa-chevron-right"></i>
         </button>
+        <button id="apple-menu-login" class="apple-mobile-menu-item" onclick="toggleAppleMenu(); openLoginModal();" style="color: var(--accent);">
+            <span id="apple-mobile-login-text">Sign In</span> <i class="fa-solid fa-right-to-bracket"></i>
+        </button>
     </div>
-
+ 
     <main>
         <section class="glass-card">
             <!-- Views Container -->
@@ -1198,16 +1204,17 @@
             <div id="diagnostics-view" class="view-content" style="display: none;">
                 <div id="diagnostics-tab-placeholder"></div>
             </div>
-
+ 
             <div id="timeline-view" class="view-content" style="display: none;">
                 <div id="timeline-tab-placeholder"></div>
             </div>
         </section>
     </main>
-
+ 
     <!-- Modals Placeholders (Dynamically Loaded) -->
     <div id="system-modal-placeholder"></div>
     <div id="contact-modal-placeholder"></div>
+    <div id="login-modal-placeholder"></div>
 
     <footer>
         &copy; 2026 Jaswanth's Broadcaster - Designed with premium iOS Glassmorphism.
@@ -1278,7 +1285,8 @@
                 loadComponent('pega-search-placeholder', '/components/pega-search.html'),
                 loadComponent('diagnostics-tab-placeholder', '/components/system-diagnostics.html'),
                 loadComponent('timeline-tab-placeholder', '/components/app-timeline.html'),
-                loadComponent('contact-modal-placeholder', '/components/contact-modal.html')
+                loadComponent('contact-modal-placeholder', '/components/contact-modal.html'),
+                loadComponent('login-modal-placeholder', '/components/login-modal.html')
             ]);
 
             bindTelegramForm();
@@ -1293,6 +1301,93 @@
         }
 
         window.addEventListener('DOMContentLoaded', init);
+
+        // Login Modal Controls & Form Handling
+        function openLoginModal() {
+            const modal = document.getElementById('login-modal');
+            if (modal) modal.classList.add('active');
+        }
+
+        function closeLoginModal() {
+            const modal = document.getElementById('login-modal');
+            if (modal) modal.classList.remove('active');
+            const responsePanel = document.getElementById('login-response');
+            if (responsePanel) {
+                responsePanel.className = 'response-panel';
+                responsePanel.innerText = '';
+            }
+        }
+
+        function closeLoginModalViaOverlay(e) {
+            if (e.target.id === 'login-modal') {
+                closeLoginModal();
+            }
+        }
+
+        function handleLoginSubmit(event) {
+            event.preventDefault();
+            const submitBtn = document.getElementById('login-submit-btn');
+            const btnContent = document.getElementById('login-btn-content');
+            const responsePanel = document.getElementById('login-response');
+            const usernameInput = document.getElementById('login-username').value.trim();
+            const passwordInput = document.getElementById('login-password').value.trim();
+
+            submitBtn.disabled = true;
+            btnContent.innerHTML = '<span class="loading-spinner"></span> Signing In...';
+            responsePanel.className = 'response-panel';
+            responsePanel.innerText = '';
+
+            // Simple simulated login for demo layout client-side
+            setTimeout(() => {
+                if (usernameInput === 'admin' && passwordInput === 'password') {
+                    responsePanel.className = 'response-panel success';
+                    responsePanel.innerHTML = '<i class="fa-solid fa-circle-check"></i> Sign In Successful! Welcome admin.';
+                    
+                    // Update main triggers
+                    const triggerBtn = document.getElementById('login-trigger-btn');
+                    if (triggerBtn) {
+                        triggerBtn.innerHTML = '<i class="fa-solid fa-right-from-bracket"></i> Sign Out';
+                        triggerBtn.setAttribute('onclick', 'handleSignOut()');
+                        triggerBtn.title = 'Sign Out';
+                    }
+                    const mobileTriggerText = document.getElementById('apple-mobile-login-text');
+                    if (mobileTriggerText) {
+                        mobileTriggerText.textContent = 'Sign Out';
+                    }
+                    const mobileTrigger = document.getElementById('apple-menu-login');
+                    if (mobileTrigger) {
+                        mobileTrigger.setAttribute('onclick', 'toggleAppleMenu(); handleSignOut();');
+                    }
+                    
+                    document.getElementById('login-username').value = '';
+                    document.getElementById('login-password').value = '';
+                    setTimeout(closeLoginModal, 1500);
+                } else {
+                    responsePanel.className = 'response-panel error';
+                    responsePanel.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> Invalid username or password.';
+                    submitBtn.disabled = false;
+                    btnContent.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Sign In';
+                }
+            }, 1000);
+        }
+
+        function handleSignOut() {
+            const triggerBtn = document.getElementById('login-trigger-btn');
+            if (triggerBtn) {
+                triggerBtn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> <span id="login-btn-text">Sign In</span>';
+                triggerBtn.setAttribute('onclick', 'openLoginModal()');
+                triggerBtn.title = 'Sign In';
+            }
+            const mobileTriggerText = document.getElementById('apple-mobile-login-text');
+            if (mobileTriggerText) {
+                mobileTriggerText.textContent = 'Sign In';
+            }
+            const mobileTrigger = document.getElementById('apple-menu-login');
+            if (mobileTrigger) {
+                mobileTrigger.setAttribute('onclick', 'toggleAppleMenu(); openLoginModal();');
+            }
+            alert('Successfully signed out.');
+        }
 
         // System Health Monitor
         async function checkHealth() {
