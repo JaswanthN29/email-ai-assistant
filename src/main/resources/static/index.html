@@ -1337,11 +1337,19 @@
             responsePanel.className = 'response-panel';
             responsePanel.innerText = '';
 
-            // Simple simulated login for demo layout client-side
-            setTimeout(() => {
-                if (usernameInput === 'admin' && passwordInput === 'password') {
+            // Perform live login request validation via /api/auth/login
+            fetch('/api/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username: usernameInput, password: passwordInput })
+            })
+            .then(res => res.json().then(data => ({ status: res.status, body: data })))
+            .then(resObj => {
+                if (resObj.status === 200 && resObj.body.success) {
                     responsePanel.className = 'response-panel success';
-                    responsePanel.innerHTML = '<i class="fa-solid fa-circle-check"></i> Sign In Successful! Welcome admin.';
+                    responsePanel.innerHTML = `<i class="fa-solid fa-circle-check"></i> Sign In Successful! Welcome ${resObj.body.username}.`;
                     
                     // Update main triggers
                     const triggerBtn = document.getElementById('login-trigger-btn');
@@ -1364,11 +1372,18 @@
                     setTimeout(closeLoginModal, 1500);
                 } else {
                     responsePanel.className = 'response-panel error';
-                    responsePanel.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> Invalid username or password.';
+                    responsePanel.innerHTML = `<i class="fa-solid fa-circle-xmark"></i> ${resObj.body.message || 'Invalid username or password.'}`;
                     submitBtn.disabled = false;
                     btnContent.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Sign In';
                 }
-            }, 1000);
+            })
+            .catch(err => {
+                console.error(err);
+                responsePanel.className = 'response-panel error';
+                responsePanel.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> Connection error occurred during authentication.';
+                submitBtn.disabled = false;
+                btnContent.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Sign In';
+            });
         }
 
         function handleSignOut() {
