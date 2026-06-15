@@ -1665,7 +1665,17 @@
 
                 if (events && events.length > 0) {
                     let html = '';
+                    let lastDate = null;
                     events.forEach(event => {
+                        if (event.eventDate !== lastDate) {
+                            html += `
+                            <div class="timeline-date-header" style="margin: 1.5rem 0 1rem 0; font-family: 'Outfit', sans-serif; font-size: 1.1rem; font-weight: 700; color: var(--text-main); border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">
+                                ${event.eventDate}
+                            </div>
+                            `;
+                            lastDate = event.eventDate;
+                        }
+                        
                         html += `
                         <div class="timeline-item">
                             <div class="timeline-dot" style="background: var(--accent);"></div>
@@ -1673,7 +1683,6 @@
                                 <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem;">
                                     <div style="flex-grow: 1;">
                                         <div class="timeline-date" style="margin-bottom: 0.35rem;">
-                                            <span>${event.eventDate}</span>
                                             <span class="timeline-badge" style="background: ${event.badgeColor || 'rgba(37, 99, 235, 0.1)'}; color: var(--accent);">${event.badge}</span>
                                         </div>
                                         <div class="timeline-company" style="margin-bottom: 0;">${event.title}</div>

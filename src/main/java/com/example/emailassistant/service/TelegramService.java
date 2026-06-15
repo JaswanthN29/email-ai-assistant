@@ -67,6 +67,8 @@ public class TelegramService {
         }
     }
 
+    private long lastUpdateId = 0;
+
     /**
      * Polls getUpdates from the Telegram Bot API and persists any newly discovered chats in the database.
      * @return the number of new chats discovered and saved.
@@ -79,6 +81,10 @@ public class TelegramService {
 
         try {
             String url = "https://api.telegram.org/bot" + telegramBotToken + "/getUpdates";
+            if (lastUpdateId > 0) {
+                url += "?offset=" + (lastUpdateId + 1);
+            }
+            
             var response = restClient.get()
                     .uri(url)
                     .retrieve()
@@ -98,6 +104,13 @@ public class TelegramService {
             for (Object updateObj : result) {
                 if (!(updateObj instanceof Map)) continue;
                 Map<?, ?> update = (Map<?, ?>) updateObj;
+                
+                if (update.containsKey("update_id")) {
+                    long updateId = ((Number) update.get("update_id")).longValue();
+                    if (updateId > lastUpdateId) {
+                        lastUpdateId = updateId;
+                    }
+                }
                 
                 Map<?, ?> chat = null;
                 if (update.containsKey("message")) {
@@ -137,9 +150,9 @@ public class TelegramService {
 
     /**
      * Background scheduled polling task to automatically discover new chat subscriptions.
-     * Runs every 30 seconds.
+     * Runs once an hour by default (configurable via telegram.sync.interval-ms).
      */
-    @Scheduled(fixedDelay = 30000)
+    @Scheduled(fixedDelayString = "${telegram.sync.interval-ms:3600000}")
     public void scheduledSync() {
         log.debug("Running scheduled Telegram chat sync...");
         int synced = syncChats();

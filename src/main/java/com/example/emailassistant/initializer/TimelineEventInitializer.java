@@ -46,7 +46,7 @@ public class TimelineEventInitializer implements CommandLineRunner {
             ProcessBuilder pb = new ProcessBuilder("git", "log", "--date=short", "--pretty=format:%ad|%s");
             Process process = pb.start();
 
-            Map<String, List<String>> commitsByDate = new LinkedHashMap<>();
+            List<String[]> commitsList = new ArrayList<>();
 
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
                 String line;
@@ -58,14 +58,14 @@ public class TimelineEventInitializer implements CommandLineRunner {
                         String msg = parts[1].trim();
                         // Ignore standard merge commits or branch tags
                         if (msg.toLowerCase().contains("merge branch")) continue;
-                        commitsByDate.computeIfAbsent(date, k -> new ArrayList<>()).add(msg);
+                        commitsList.add(new String[]{date, msg});
                     }
                 }
             }
 
             process.waitFor();
 
-            if (commitsByDate.isEmpty()) {
+            if (commitsList.isEmpty()) {
                 log.warn("No commits found in git log. Skipping database sync.");
                 return;
             }
@@ -76,12 +76,11 @@ public class TimelineEventInitializer implements CommandLineRunner {
             List<TimelineEvent> dbEvents = new ArrayList<>();
             DateTimeFormatter parseFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             DateTimeFormatter displayFormatter = DateTimeFormatter.ofPattern("MMMM d, yyyy", Locale.ENGLISH);
-            Set<String> seenTitles = new HashSet<>();
 
-            for (Map.Entry<String, List<String>> entry : commitsByDate.entrySet()) {
-                String rawDate = entry.getKey();
-                List<String> commits = entry.getValue();
-
+            for (String[] entry : commitsList) {
+                String rawDate = entry[0];
+                String commitMsg = entry[1];
+                
                 // Format raw date
                 String formattedDate = rawDate;
                 try {
@@ -105,35 +104,33 @@ public class TimelineEventInitializer implements CommandLineRunner {
                 boolean hasDocker = false;
                 String featTitle = null;
 
-                for (String c : commits) {
-                    String low = c.toLowerCase();
-                    if (low.contains("rag") || low.contains("pega") || low.contains("vector") || low.contains("pinecone") || low.contains("embedding")) {
-                        hasRag = true;
-                    }
-                    if (low.contains("telegram") || low.contains("broadcaster") || low.contains("sender") || low.contains("chat")) {
-                        hasTelegram = true;
-                    }
-                    if (low.contains("timeline") && (low.contains("database") || low.contains("db") || low.contains("migration") || low.contains("jpa"))) {
-                        hasDbTimeline = true;
-                    }
-                    if (low.contains("avatar") || low.contains("photo") || low.contains("image") || low.contains("upload")) {
-                        hasMedia = true;
-                    }
-                    if (low.contains("theme") || low.contains("dark") || low.contains("light")) {
-                        hasTheme = true;
-                    }
-                    if (low.contains("docker") || low.contains("dockerfile") || low.contains("deployment") || low.contains("railway")) {
-                        hasDocker = true;
-                    }
-                    
-                    // General feat: extraction fallback
-                    if (featTitle == null && (low.startsWith("feat:") || low.startsWith("feat("))) {
-                        int colonIdx = c.indexOf(":");
-                        if (colonIdx != -1) {
-                            String desc = c.substring(colonIdx + 1).trim();
-                            if (!desc.isEmpty()) {
-                                featTitle = "Feature: " + Character.toUpperCase(desc.charAt(0)) + desc.substring(1);
-                            }
+                String low = commitMsg.toLowerCase();
+                if (low.contains("rag") || low.contains("pega") || low.contains("vector") || low.contains("pinecone") || low.contains("embedding")) {
+                    hasRag = true;
+                }
+                if (low.contains("telegram") || low.contains("broadcaster") || low.contains("sender") || low.contains("chat")) {
+                    hasTelegram = true;
+                }
+                if (low.contains("timeline") && (low.contains("database") || low.contains("db") || low.contains("migration") || low.contains("jpa"))) {
+                    hasDbTimeline = true;
+                }
+                if (low.contains("avatar") || low.contains("photo") || low.contains("image") || low.contains("upload")) {
+                    hasMedia = true;
+                }
+                if (low.contains("theme") || low.contains("dark") || low.contains("light")) {
+                    hasTheme = true;
+                }
+                if (low.contains("docker") || low.contains("dockerfile") || low.contains("deployment") || low.contains("railway")) {
+                    hasDocker = true;
+                }
+                
+                // General feat: extraction fallback
+                if (featTitle == null && (low.startsWith("feat:") || low.startsWith("feat("))) {
+                    int colonIdx = commitMsg.indexOf(":");
+                    if (colonIdx != -1) {
+                        String desc = commitMsg.substring(colonIdx + 1).trim();
+                        if (!desc.isEmpty()) {
+                            featTitle = "Feature: " + Character.toUpperCase(desc.charAt(0)) + desc.substring(1);
                         }
                     }
                 }
@@ -180,18 +177,10 @@ public class TimelineEventInitializer implements CommandLineRunner {
                     subtitle = "Dependency tuning, log verbosity controls, and backend reliability patches";
                 }
 
-                if (seenTitles.contains(title)) {
-                    log.info("Skipping duplicate feature timeline entry for title: {}", title);
-                    continue;
-                }
-                seenTitles.add(title);
-
-                // Build bullet list of daily git commits
+                // Build bullet list of git commit
                 StringBuilder descBuilder = new StringBuilder();
                 descBuilder.append("<ul style=\"margin-left: 1.2rem; padding-left: 0; list-style-type: disc;\">");
-                for (String c : commits) {
-                    descBuilder.append("<li style=\"margin-bottom: 0.3rem;\">").append(c).append("</li>");
-                }
+                descBuilder.append("<li style=\"margin-bottom: 0.3rem;\">").append(commitMsg).append("</li>");
                 descBuilder.append("</ul>");
 
                 dbEvents.add(TimelineEvent.builder()
@@ -204,7 +193,8 @@ public class TimelineEventInitializer implements CommandLineRunner {
                         .build());
             }
 
-            // Sync database
+            // Sync database. Reverse list to ensure highest date gets the highest ID.
+            Collections.reverse(dbEvents);
             repository.saveAll(dbEvents);
             log.info("Git commit log successfully synced to PostgreSQL database. Total days recorded: {}", dbEvents.size());
 
